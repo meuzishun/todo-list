@@ -5,9 +5,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo</title>
+    <link rel="stylesheet" href="src/css/style.min.css">
     <script src="main.js" type="module" defer></script>
 </head>
 <body>
-    
+    <header>
+        <h1>Todo List</h1>
+    </header>
+    <nav>
+        <div class="static-nav">
+            <button class="inbox selected">Inbox</button>
+            <button class="today">Today</button>
+            <button class="this-week">This week</button>
+        </div>
+        <div class="projects-nav">
+            <h3>Projects</h3>
+            <button class="add-project">Add Project</button>
+        </div>
+    </nav>
+    <main>
+        <div class="inbox-container">
+            <h2>Inbox</h2>
+            <button>Add Task</button>
+        </div>
+    </main>
+    <footer>
+        <p>Copyright 2021 meuzishun</p>
+    </footer>
 </body>
 </html>
