@@ -6,31 +6,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo</title>
     <link rel="stylesheet" href="src/css/style.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="main.js" type="module" defer></script>
 </head>
 <body>
     <header>
-        <h1>Todo List</h1>
+        <h1><i class="fa fa-check"></i> Todo List</h1>
     </header>
     <nav>
         <div class="static-nav">
-            <button class="inbox selected">Inbox</button>
-            <button class="today">Today</button>
-            <button class="this-week">This week</button>
+            <button class="inbox selected"><i class="fa fa-inbox"></i> Inbox</button>
+            <button class="today"><i class="fa fa-calendar-o"></i> Today</button>
+            <button class="this-week"><i class="fa fa-calendar"></i> This week</button>
         </div>
         <div class="projects-nav">
             <h3>Projects</h3>
-            <button class="add-project">Add Project</button>
+            <div class="user-projects"></div>
+            <button class="add-project-btn"><i class="fa fa-plus"></i> Add Project</button>
         </div>
     </nav>
     <main>
-        <div class="inbox-container">
+        <div class="project-container inbox-container">
             <h2>Inbox</h2>
-            <button>Add Task</button>
+            <!-- dynamically created task starts here... -->
+            <!-- <div class="tasks-container">
+                <div class="single-task-container">
+                    <input type="checkbox" class="task-checkbox" id="taskName-checkbox">
+                    <label class="task-label" for="taskName-checkbox"> Test Task</label>
+                </div>
+            </div> -->
+            <!-- ...and ends here. -->
+
+            <button class="add-task-btn"><i class="fa fa-plus"></i> Add Task</button>
         </div>
     </main>
     <footer>
         <p>Copyright 2021 meuzishun</p>
     </footer>
+    <div class="overlay hidden">
+        <div class="form-container new-project-form-container hidden">
+            <p class="form-close-btn"><i class="fa fa-remove"></i></p>
+            <h2>Add New Project</h2>
+            <form class="new-project-form">
+                <input type="text" placeholder="Project Name" required>
+                <input type="submit" value="Add Project">
+            </form>
+        </div>
+        <div class="form-container new-task-form-container hidden">
+            <p class="form-close-btn"><i class="fa fa-remove"></i></p>
+            <h2>Add New Task</h2>
+            <form class="new-task-form">
+                <input type="text" placeholder="Title" required>
+                <input type="text" placeholder="Description">
+                <div class="due-date-container">
+                    <label for="due-date">Due Date: </label>
+                    <input type="date" id="due-date" placeholder="Due Date">
+                </div>
+                <input type="submit" value="Add Task">
+            </form>
+        </div>
+    </div>
 </body>
 </html>

@@ -1,20 +1,17 @@
-import { Project } from './modules/project.js';
-import { Todo } from './modules/todo.js';
 import { events } from './modules/events.js';
+import { forms } from './modules/forms.js';
+import { Project } from './modules/project.js';
+import { projects } from './modules/projects.js';
+import { Task } from './modules/task.js';
+import { tasks } from './modules/tasks.js';
+import { navbar } from './modules/navBar.js';
+import { mainContent } from './modules/mainContent.js';
 
-function doOnNewProject() {
-    console.log('A new project was created');
+function logData(data) {
+    console.log(data);
 }
 
-function doOnNewTodo() {
-    console.log('A new todo was created');
-}
 
-events.on('newProjectCreated', doOnNewProject);
-events.on('newTodoCreated', doOnNewTodo);
+// events.emit('newProjectCreated', inbox);
 
-const testProject = new Project('test title');
-const testTodo = new Todo('test title', 'test description', 'test due date', 'other?');
-
-events.printEvents();
-
+// events.printEvents();

@@ -4,9 +4,11 @@ import { events } from './events.js';
 class Project {
     constructor(title) {
         this.title = title;
-        this.todos = {};
+        this.tasks = {};
+    }
 
-        events.emit('newProjectCreated', this);
+    addTask(task) {
+        this.tasks[task.title] = task;
     }
 }
 
