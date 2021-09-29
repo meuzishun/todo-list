@@ -1,4 +1,5 @@
 import { events } from './events.js';
+// import { projects } from './projects.js';
 
 const mainContent = document.querySelector('main');
 
@@ -20,8 +21,25 @@ function changeMainContent(project) {
     const tasksContainer = document.createElement('div');
     tasksContainer.classList.add('tasks-container');
 
+    function addTasks(tasks) {
+        project.tasks = tasks;
+    }
+
     function updateTasksDisplay() {
         tasksContainer.textContent = '';
+
+        if (project.title === 'Today') {
+            events.emit('todayBtnClicked');
+            //! Not getting tasks on first click
+            events.on('todaysTasksAssembled', addTasks);
+        }
+        
+        if (project.title === 'This week') {
+            events.emit('thisWeekBtnClicked');
+            //! Not getting all tasks
+            events.on('thisWeeksTasksAssembled', addTasks);
+        }
+
         // for each task in the project:
         for (const task in project.tasks) {
             const currentTask = project.tasks[task];
@@ -41,11 +59,11 @@ function changeMainContent(project) {
             taskLabel.setAttribute('for', `${taskTitle}-checkbox`);
             // insert task.title into label
             taskLabel.textContent = currentTask.title;
+            //TODO: insert task.dueDate
             // append all the elements
             taskContainer.appendChild(taskCheckbox);
             taskContainer.appendChild(taskLabel);
             // insert the container before the addTaskBtn
-            //! Sometimes addTaskBtn isn't there yet...
             tasksContainer.appendChild(taskContainer);
         }
     }
@@ -54,33 +72,41 @@ function changeMainContent(project) {
     // listen for new task creation...
     events.on('newTaskCreated', updateTasksDisplay);
 
-    function handleAddTaskBtnClick() {
-        events.emit('addTaskBtnClicked');
-    }
-
-    // create the icon for the addTaskButton...
-    const icon = document.createElement('i');
-    icon.classList.add('fa');
-    icon.classList.add('fa-plus');
-    
-    // create the addTaskButton...
-    const addTaskBtn = document.createElement('button');
-    addTaskBtn.classList.add('add-task-btn');
-    addTaskBtn.appendChild(icon);
-
-    // add text to the addTaskButton...
-    const addTaskBtnText = document.createTextNode(' Add Task');
-    addTaskBtn.appendChild(addTaskBtnText);
-    addTaskBtn.addEventListener('click', handleAddTaskBtnClick)
-    
-    // append everything to the HTML doc
     projectContainer.appendChild(projectHeading);
     projectContainer.appendChild(tasksContainer);
-    projectContainer.appendChild(addTaskBtn);
+
+    if (project.title !== 'Today' && project.title !== 'This week') {
+        function handleAddTaskBtnClick(e) {
+            const btn = e.target;
+            events.emit('addTaskBtnClicked', btn);
+        }
+    
+        // create the icon for the addTaskButton...
+        const icon = document.createElement('i');
+        icon.classList.add('fa');
+        icon.classList.add('fa-plus');
+        
+        // create the addTaskButton...
+        const addTaskBtn = document.createElement('button');
+        addTaskBtn.classList.add('add-task-btn');
+        addTaskBtn.appendChild(icon);
+    
+        // add text to the addTaskButton...
+        const addTaskBtnText = document.createTextNode(' Add Task');
+        addTaskBtn.appendChild(addTaskBtnText);
+        addTaskBtn.addEventListener('click', handleAddTaskBtnClick);
+        projectContainer.appendChild(addTaskBtn);
+    }
+
+    // append everything to the HTML doc
     mainContent.appendChild(projectContainer);
 
 }
 
+events.on('documentLoaded', changeMainContent);
+
 events.on('projectBtnClicked', changeMainContent);
+
+
 
 export { mainContent };

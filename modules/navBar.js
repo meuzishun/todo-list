@@ -16,6 +16,7 @@ const navbar = (function() {
     // TODO: store these in staticProjects
     const inbox = new Project('Inbox');
     events.emit('staticProjectCreated', inbox);
+    
     // const inboxBtn = createProjectBtn(inbox);
     // const inboxIcon = document.createElement('i');
     // inboxIcon.classList.add('fa');
@@ -41,8 +42,10 @@ const navbar = (function() {
         btn.addEventListener('click', handleProjectBtnClick);
     });
 
-    function handleAddProjectBtnClick() {
-        events.emit('addProjectBtnClicked');
+    function handleAddProjectBtnClick(e) {
+        const btn = e.target;
+        console.log(btn);
+        events.emit('addProjectBtnClicked', btn);
     }
     
     addProjectBtn.addEventListener('click', handleAddProjectBtnClick);
@@ -85,6 +88,7 @@ const navbar = (function() {
     }
 
     events.on('userProjectListUpdated', updateUserProjectBtnList);
+    events.emit('documentLoaded', inbox);
 
 })();
 
