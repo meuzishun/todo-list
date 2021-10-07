@@ -20,10 +20,12 @@ const tasks = (function() {
         const todaysDateAsString = todaysDate.toDateString();
         const tasksAsArray = Object.values(tasks);
         const todaysTasks = tasksAsArray.filter(task => formatDate(task.dueDate) === todaysDateAsString);
+        console.log(todaysTasks);
         events.emit('todaysTasksAssembled', todaysTasks);
     }
     
     function getThisWeeksTasks() {
+        //! Something isn't working here...
         const todaysDate = new Date();
         const todaysDateAsString = todaysDate.toDateString();
         const todaysYear = todaysDate.getFullYear();
@@ -38,6 +40,8 @@ const tasks = (function() {
     
     events.on('newTaskCreated', storeTask);
     events.on('todayBtnClicked', getTodaysTasks);
+    events.on('taskListUpdated', getTodaysTasks);
+    events.on('taskListUpdated', getThisWeeksTasks);
     events.on('thisWeekBtnClicked', getThisWeeksTasks);
 })();
 

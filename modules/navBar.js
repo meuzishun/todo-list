@@ -9,6 +9,8 @@ const navbar = (function() {
     // const userProjects = projectsNav.querySelector('.user-projects');
     // const addProjectBtn = projectsNav.querySelector('.add-project-btn');
 
+
+
     const createStaticNav = function() {
         const staticNavContainer = document.createElement('div');
         staticNavContainer.classList.add('static-nav');
@@ -26,6 +28,9 @@ const navbar = (function() {
                 const inbox = new Project('Inbox');
                 events.emit('staticProjectCreated', inbox);
                 events.emit('documentLoaded', inbox);
+                // events.on('todaysTasksAssembled', (tasks) => {
+                //     inbox.tasks = tasks;
+                // });
                 btn.project = inbox;
             }
             
@@ -35,6 +40,9 @@ const navbar = (function() {
                 text = document.createTextNode(' Today');
                 const today = new Project('Today');
                 events.emit('staticProjectCreated', today);
+                events.on('todaysTasksAssembled', (tasks) => {
+                    today.tasks = tasks;
+                });
                 btn.project = today;
             }
             
@@ -44,6 +52,9 @@ const navbar = (function() {
                 text = document.createTextNode(' This week');
                 const thisWeek = new Project('This week');
                 events.emit('staticProjectCreated', thisWeek);
+                events.on('thisWeeksTasksAssembled', (tasks) => {
+                    thisWeek.tasks = tasks;
+                });
                 btn.project = thisWeek;
             }
 
