@@ -1,15 +1,8 @@
 import { events } from "./events.js";
 import { Project } from "./project.js";
-// import { projects } from "./projects.js";
 
 const navbar = (function() {
     const navbar = document.querySelector('nav');
-
-    // const projectsNav = navbar.querySelector('.projects-nav');
-    // const userProjects = projectsNav.querySelector('.user-projects');
-    // const addProjectBtn = projectsNav.querySelector('.add-project-btn');
-
-
 
     const createStaticNav = function() {
         const staticNavContainer = document.createElement('div');
@@ -28,9 +21,6 @@ const navbar = (function() {
                 const inbox = new Project('Inbox');
                 events.emit('staticProjectCreated', inbox);
                 events.emit('documentLoaded', inbox);
-                // events.on('todaysTasksAssembled', (tasks) => {
-                //     inbox.tasks = tasks;
-                // });
                 btn.project = inbox;
             }
             
@@ -129,7 +119,6 @@ const navbar = (function() {
         const projectBtn = e.target;
         clearSelectedBtns();
         projectBtn.classList.add('selected');
-        
         //? Should we be attaching the project to the btn like this?
         const project = projectBtn.project;
         events.emit('projectBtnClicked', project);
@@ -155,7 +144,6 @@ const navbar = (function() {
 
     events.on('userProjectListUpdated', updateUserProjectBtnList);
     
-
 })();
 
 export { navbar };
