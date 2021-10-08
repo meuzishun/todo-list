@@ -30,7 +30,7 @@ const changeMainContent = function() {
     projectContainer.appendChild(tasksContainer);
 
     for (const task in displayedProject.tasks) {
-        console.log('adding tasks...');
+        // console.log('adding tasks...');
         const currentTask = displayedProject.tasks[task];
         const taskTitle = currentTask.title.replace(/\s/g, '-');
         const taskContainer = document.createElement('div');
