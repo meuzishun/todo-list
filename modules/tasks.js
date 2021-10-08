@@ -8,43 +8,31 @@ const tasks = (function() {
         events.emit('taskListUpdated', tasks);
     }
 
-    function formatDate(date) {
-        const dateSplit = date.split('-');
-        const dateNums = dateSplit.map(item => +item);
-        const dateFormatted = new Date([...dateNums]).toDateString();
-        return dateFormatted;
-    }
-
-    function getTodaysTasks() {
-        const todaysDate = new Date();
-        const todaysDateFormatted = todaysDate.toDateString();
-        // const todaysDateAsString = todaysDate.toDateString();
-        const tasksAsArray = Object.values(tasks);
+    function getTodaysTasks(now, tasksAsArray) {
+        const todaysDateFormatted = now.toDateString();
         const todaysTasks = tasksAsArray.filter(task => todaysDateFormatted === task.dueDate.toDateString());
-        // console.log(todaysTasks);
         events.emit('todaysTasksAssembled', todaysTasks);
     }
     
-    function getThisWeeksTasks() {
-        //! Something isn't working here...
-        const todaysDate = new Date();
-        // console.log(todaysDate);
-        // const todaysDateAsString = todaysDate.toDateString();
-        // const todaysYear = todaysDate.getFullYear();
-        // const todaysMonth = todaysDate.getMonth();
-        // const todaysDay = todaysDate.getDate();
-        // const aWeekAway = new Date(todaysYear, todaysMonth, (todaysDay + 7));
-        // const aWeekAwayAsString = aWeekAway.toDateString();
-        // const tasksAsArray = Object.values(tasks);
-        // const thisWeeksTasks = tasksAsArray.filter(task => formatDate(task.dueDate) >= todaysDateAsString && formatDate(task.dueDate) <= aWeekAwayAsString);
-        // events.emit('thisWeeksTasksAssembled', thisWeeksTasks);
+    function getThisWeeksTasks(now, tasksAsArray) {
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const endOfWeek = new Date();
+        const todaysDate = today.getDate();
+        const sevenDaysFromToday = todaysDate + 6;
+        endOfWeek.setDate(sevenDaysFromToday);
+        const thisWeeksTasks = tasksAsArray.filter(task => task.dueDate.getTime() < endOfWeek.getTime() && task.dueDate.getTime() >= today.getTime());
+        events.emit('thisWeeksTasksAssembled', thisWeeksTasks);
+    }
+
+    function populateUpcoming() {
+        const now = new Date();
+        const tasksAsArray = Object.values(tasks);
+        getTodaysTasks(now, tasksAsArray);
+        getThisWeeksTasks(now, tasksAsArray);
     }
     
     events.on('newTaskCreated', storeTask);
-    // events.on('todayBtnClicked', getTodaysTasks);
-    events.on('taskListUpdated', getTodaysTasks);
-    events.on('taskListUpdated', getThisWeeksTasks);
-    // events.on('thisWeekBtnClicked', getThisWeeksTasks);
+    events.on('taskListUpdated', populateUpcoming);
 })();
 
 export { tasks };
