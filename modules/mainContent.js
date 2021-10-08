@@ -73,8 +73,7 @@ events.on('documentLoaded', changeMainContent);
 
 events.on('projectBtnClicked', setDisplayedProject);
 events.on('projectBtnClicked', changeMainContent);
+
 events.on('newTaskCreated', changeMainContent);
-
-
 
 export { mainContent };
