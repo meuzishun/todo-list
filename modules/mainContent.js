@@ -30,22 +30,69 @@ const changeMainContent = function() {
     projectContainer.appendChild(tasksContainer);
 
     for (const task in displayedProject.tasks) {
-        // console.log('adding tasks...');
         const currentTask = displayedProject.tasks[task];
         const taskTitle = currentTask.title.replace(/\s/g, '-');
+
         const taskContainer = document.createElement('div');
         taskContainer.classList.add("single-task-container");
+
+        const checkLabelContainer = document.createElement('div');
+        checkLabelContainer.classList.add('check-label-container');
+
         const taskCheckbox = document.createElement('input');
         taskCheckbox.setAttribute('type', 'checkbox');
         taskCheckbox.classList.add('task-checkbox');
         taskCheckbox.id = `${taskTitle}-checkbox`;
+
         const taskLabel = document.createElement('label');
         taskLabel.classList.add("task-label");
         taskLabel.setAttribute('for', `${taskTitle}-checkbox`);
         taskLabel.textContent = currentTask.title;
-        //TODO: insert task.dueDate
-        taskContainer.appendChild(taskCheckbox);
-        taskContainer.appendChild(taskLabel);
+
+        checkLabelContainer.appendChild(taskCheckbox);
+        checkLabelContainer.appendChild(taskLabel);
+
+        taskContainer.appendChild(checkLabelContainer);
+        
+        //TODO: add button and content for description (conditional?)
+        
+        if (currentTask.description) {
+            const descriptionContainer = document.createElement('div');
+            descriptionContainer.classList.add('description-container');
+
+            const descriptionBtn = document.createElement('button');
+            descriptionBtn.classList.add('description-btn');
+            descriptionBtn.textContent = 'Show Description';
+            descriptionBtn.addEventListener('click', () => {
+                alert(taskDescription.textContent);
+            });
+            descriptionContainer.appendChild(descriptionBtn);
+            
+            const taskDescription = document.createElement('p');
+            taskDescription.classList.add('task-description');
+            taskDescription.textContent = currentTask.description;
+            // descriptionContainer.appendChild(taskDescription);
+            taskContainer.appendChild(descriptionContainer);
+        }
+        
+        const dueDateContainer = document.createElement('div');
+        dueDateContainer.classList.add('due-date-container');
+
+        const taskDueDate = document.createElement('p');
+        taskDueDate.classList.add('task-due-date');
+        taskDueDate.textContent = currentTask.dueDate.toDateString();
+        dueDateContainer.appendChild(taskDueDate);
+        
+        if (displayedProject.title === 'Today' || displayedProject.title === 'This week') {
+            const projectReminder = document.createElement('p');
+            projectReminder.classList.add('project-reminder');
+            console.log(currentTask);
+            projectReminder.textContent = currentTask.originalProject.title;
+            dueDateContainer.appendChild(projectReminder);
+        }
+        
+        taskContainer.appendChild(dueDateContainer);
+
         tasksContainer.appendChild(taskContainer);
     }
     

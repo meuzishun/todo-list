@@ -3,6 +3,7 @@ $black-color: rgb(57, 57, 57);
 $dark-grey-color: rgb(213, 213, 213);
 $light-grey-color: rgb(230, 230, 230);
 $very-light-grey-color: rgb(238, 238, 238);
+$super-light-grey-color: rgb(249, 249, 249);
 $white-color: white;
 $transparent: rgba(255, 255, 255, 0);
 
@@ -51,7 +52,7 @@ body {
 		}
 	}
 
-	nav {
+	.nav-bar {
 		grid-area: navbar;
 		display: flex;
 		flex-direction: column;
@@ -89,7 +90,7 @@ body {
 		}
 	}
 
-	main {
+	.main-content {
 		grid-area: main;
 		padding-top: 3rem;
 		display: flex;
@@ -101,40 +102,84 @@ body {
 			flex-direction: column;
 			gap: 1rem;
 
-            h2 {
-                font-size: 2rem;
-                font-weight: normal;
-            }
+			h2 {
+				font-size: 2rem;
+				font-weight: normal;
+			}
 
 			.tasks-container {
+				display: flex;
+				flex-direction: column;
+				gap: 0.5rem;
+
 				.single-task-container {
 					width: 100%;
-					background-color: $transparent;
+					background-color: $super-light-grey-color;
+
 					&:hover {
 						background-color: $very-light-grey-color;
 					}
+
 					display: flex;
 					align-items: center;
 					gap: 0.5rem;
-					text-align: left;
-					padding: 0.5rem;
+					justify-content: space-between;
 					border: none;
 					border-radius: 5px;
-	
-					.task-checkbox {
-						font-size: 1.2rem;
-						width: 1rem;
-						height: 1rem;
-					}
+					padding: 0.5rem;
 					
-					.task-label {
-						font-size: 1.2rem;
-						// flex-grow: 1;
+					.check-label-container {
+						display: flex;
+						gap: 1rem;
+						align-items: center;
+
+						.task-checkbox {
+							font-size: 1.2rem;
+							width: 1rem;
+							height: 1rem;
+						}
+						
+						.task-label {
+							font-size: 1.2rem;
+						}
 					}
+
+					.description-container {
+
+						.description-btn {
+							font-size: 0.85rem;
+							padding: 0.2rem;
+							background-color: $transparent;
+
+							&:hover {
+								font-size: 0.9rem;
+								// padding: 0;
+							}
+						}
+
+						.task-description {
+							font-size: 0.85rem;
+						}
+					}
+
+					.due-date-container {
+						display: flex;
+						align-items: center;
+						gap: 1rem;
+
+						.task-due-date {
+							font-size: 1.2rem;
+						}
+
+						.project-reminder {
+							font-size: 0.75rem;
+							text-align: center;
+						}
+					}
+
+
 				}
 			}
-
-            
 
 			.add-task-btn {
 				background-color: $transparent;
@@ -144,8 +189,6 @@ body {
 				}
 			}
 		}
-
-		
 	}
 
 	footer {

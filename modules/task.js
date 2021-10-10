@@ -6,6 +6,7 @@ class Task {
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
+        // this.originalProject = originalProject;
     }
 }
 

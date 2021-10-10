@@ -43,6 +43,7 @@ const projects = (function() {
     }
 
     function storeTask(task) {
+        task.originalProject = currentProject;
         currentProject.addTask(task);
     }
 
