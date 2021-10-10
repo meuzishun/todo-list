@@ -1,12 +1,12 @@
-import { events } from './modules/events.js';
-import { forms } from './modules/forms.js';
-import { Project } from './modules/project.js';
-import { projects } from './modules/projects.js';
-import { Task } from './modules/task.js';
-import { tasks } from './modules/tasks.js';
-import { mainContent } from './modules/mainContent.js';
-import { navbar } from './modules/navBar.js';
-import { markup } from './modules/markup.js';
+import { events } from './js/events.js';
+import { forms } from './js/forms.js';
+import { Project } from './js/project.js';
+import { projects } from './js/projects.js';
+import { Task } from './js/task.js';
+import { tasks } from './js/tasks.js';
+import { mainContent } from './js/mainContent.js';
+import { navbar } from './js/navBar.js';
+import { markup } from './js/markup.js';
 
 events.printEvents();
 
