@@ -83,11 +83,9 @@ body {
 			}
 		}
 
-		.static-nav {
-		}
+		// .static-nav {}
 
-		.projects-nav {
-		}
+		// .projects-nav {}
 	}
 
 	.main-content {
@@ -152,7 +150,8 @@ body {
 							background-color: $transparent;
 
 							&:hover {
-								font-size: 0.9rem;
+								// font-size: 0.9rem;
+								text-decoration: underline;
 							}
 						}
 
