@@ -54,8 +54,6 @@ const changeMainContent = function() {
 
         taskContainer.appendChild(checkLabelContainer);
         
-        //TODO: add button and content for description (conditional?)
-        
         if (currentTask.description) {
             const descriptionContainer = document.createElement('div');
             descriptionContainer.classList.add('description-container');
@@ -71,7 +69,6 @@ const changeMainContent = function() {
             const taskDescription = document.createElement('p');
             taskDescription.classList.add('task-description');
             taskDescription.textContent = currentTask.description;
-            // descriptionContainer.appendChild(taskDescription);
             taskContainer.appendChild(descriptionContainer);
         }
         
