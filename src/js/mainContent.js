@@ -99,7 +99,7 @@ const changeMainContent = function() {
         if (displayedProject.title === 'Today' || displayedProject.title === 'This week') {
             const projectReminder = document.createElement('p');
             projectReminder.classList.add('project-reminder');
-            projectReminder.textContent = `(${currentTask.originalProject.title})`;
+            projectReminder.textContent = `(${currentTask.originalProject})`;
             taskHeaderLeftSide.appendChild(projectReminder);
         }
 
