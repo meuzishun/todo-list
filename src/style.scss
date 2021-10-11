@@ -119,64 +119,94 @@ body {
 					}
 
 					display: flex;
-					align-items: flex-start;
-					gap: 0.5rem;
-					justify-content: space-between;
-					border: none;
-					border-radius: 5px;
-					padding: 0.5rem;
-					flex-wrap: wrap;
+					flex-direction: column;
+					// align-items: flex-start;
+					// justify-content: space-between;
+					// border: none;
+					// border-radius: 5px;
+					// padding: 0.5rem;
+					// flex-wrap: wrap;
+					
+					.task-header {
+						display: flex;
+						flex-direction: row;
+						justify-content: space-between;
+						border: none;
+						border-radius: 5px;
+						padding: 0.5rem;
+						
+						.task-header-left-side {
+							display: flex;
+							align-items: center;
+							gap: 0.5rem;
+
+							.task-checkbox {
+								font-size: 1.2rem;
+								width: 1rem;
+								height: 1rem;
+							}
+	
+							.task-label {
+								font-size: 1.2rem;
+							}
+	
+							.project-reminder {
+								font-size: 0.75rem;
+								text-align: center;
+							}
+						}
+
+						.task-header-center {
+							.description-btn {
+								font-size: 0.85rem;
+								padding: 0.2rem;
+								background-color: $transparent;
+	
+								&:hover {
+									// font-size: 0.9rem;
+									text-decoration: underline;
+								}
+							}
+						}
+
+						.task-header-right-side {
+							.task-due-date {
+								font-size: 1.2rem;
+							}
+						}
+					}
+
+					.description-container {
+						padding: 1rem;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+
+						.task-description {
+							font-size: 1rem;
+						}
+
+						&.hidden {
+							display: none;
+						}
+					}
 
 					.check-label-container {
 						display: flex;
 						gap: 1rem;
 						align-items: center;
 
-						.task-checkbox {
-							font-size: 1.2rem;
-							width: 1rem;
-							height: 1rem;
-						}
-
-						.task-label {
-							font-size: 1.2rem;
-						}
-
-						.project-reminder {
-							font-size: 0.75rem;
-							text-align: center;
-						}
+						
 					}
 
-					.description-container {
-						.description-btn {
-							font-size: 0.85rem;
-							padding: 0.2rem;
-							background-color: $transparent;
-
-							&:hover {
-								// font-size: 0.9rem;
-								text-decoration: underline;
-							}
-						}
-
-						.task-description {
-							font-size: 1rem;
-
-							&.hidden {
-								display: none;
-							}
-						}
-					}
+					
 
 					.due-date-container {
 						display: flex;
 						align-items: center;
 						gap: 1rem;
 
-						.task-due-date {
-							font-size: 1.2rem;
-						}
+						
 					}
 				}
 			}

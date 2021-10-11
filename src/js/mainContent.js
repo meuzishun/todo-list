@@ -15,10 +15,12 @@ const handleAddTaskBtnClick = function(e) {
 
 const toggleDescriptionDisplay = function(e) {
     const descriptionBtn = e.target;
-    const descriptionContainer = descriptionBtn.parentElement;
-    const taskDescription = descriptionContainer.querySelector('.task-description');
-    taskDescription.classList.toggle('hidden');
-    descriptionBtn.textContent = taskDescription.classList.contains('hidden') ? 'Show Description' : 'Hide Description';
+    const centerContainer = descriptionBtn.parentElement;
+    const taskHeader = centerContainer.parentElement;
+    const taskContainer = taskHeader.parentElement;
+    const descriptionContainer = taskContainer.querySelector('.description-container');
+    descriptionContainer.classList.toggle('hidden');
+    descriptionBtn.textContent = descriptionContainer.classList.contains('hidden') ? 'Show Description' : 'Hide Description';
 }
 
 const changeMainContent = function() {
@@ -49,45 +51,71 @@ const changeMainContent = function() {
         const taskContainer = document.createElement('div');
         taskContainer.classList.add("single-task-container");
 
+        // Create a task header
+        const taskHeader = document.createElement('div');
+        taskHeader.classList.add('task-header');
+        taskContainer.appendChild(taskHeader);
+
+        // Create a task left-side
+        const taskHeaderLeftSide = document.createElement('div');
+        taskHeaderLeftSide.classList.add('task-header-left-side');
+        taskHeader.appendChild(taskHeaderLeftSide);
+        
+        // Create a task center
+        const taskHeaderCenter = document.createElement('div');
+        taskHeaderCenter.classList.add('task-header-center');
+        taskHeader.appendChild(taskHeaderCenter);
+        
+        // Create a task right-side
+        const taskHeaderRightSide = document.createElement('div');
+        taskHeaderRightSide.classList.add('task-header-right-side');
+        taskHeader.appendChild(taskHeaderRightSide);
+
+        // Create task content
+        const descriptionContainer = document.createElement('div');
+        descriptionContainer.classList.add('description-container');
+        descriptionContainer.classList.add('hidden');
+        taskContainer.appendChild(descriptionContainer);
+
         // Create a container for the checkbox, label, and optional project reminder
-        const checkLabelContainer = document.createElement('div');
-        checkLabelContainer.classList.add('check-label-container');
+        // const checkLabelContainer = document.createElement('div');
+        // checkLabelContainer.classList.add('check-label-container');
 
         // Create the task checkbox
         const taskCheckbox = document.createElement('input');
         taskCheckbox.setAttribute('type', 'checkbox');
         taskCheckbox.classList.add('task-checkbox');
         taskCheckbox.id = `${taskTitle}-checkbox`;
-        checkLabelContainer.appendChild(taskCheckbox);
+        taskHeaderLeftSide.appendChild(taskCheckbox);
 
         // Create the task label
         const taskLabel = document.createElement('label');
         taskLabel.classList.add("task-label");
         taskLabel.setAttribute('for', `${taskTitle}-checkbox`);
         taskLabel.textContent = currentTask.title;
-        checkLabelContainer.appendChild(taskLabel);
+        taskHeaderLeftSide.appendChild(taskLabel);
 
         // Create the project reminder if necessary
         if (displayedProject.title === 'Today' || displayedProject.title === 'This week') {
             const projectReminder = document.createElement('p');
             projectReminder.classList.add('project-reminder');
             projectReminder.textContent = `(${currentTask.originalProject.title})`;
-            checkLabelContainer.appendChild(projectReminder);
+            taskHeaderLeftSide.appendChild(projectReminder);
         }
 
-        taskContainer.appendChild(checkLabelContainer);
+        // taskContainer.appendChild(checkLabelContainer);
 
         // Check for a task description
         if (currentTask.description) {
             // Create description container
-            const descriptionContainer = document.createElement('div');
-            descriptionContainer.classList.add('description-container');
+            // const descriptionContainer = document.createElement('div');
+            // descriptionContainer.classList.add('description-container');
 
             const descriptionBtn = document.createElement('button');
             descriptionBtn.classList.add('description-btn');
             descriptionBtn.textContent = 'Show Description';
             descriptionBtn.addEventListener('click', toggleDescriptionDisplay);
-            descriptionContainer.appendChild(descriptionBtn);
+            taskHeaderCenter.appendChild(descriptionBtn);
             
             const taskDescription = document.createElement('p');
             taskDescription.classList.add('task-description');
@@ -95,17 +123,16 @@ const changeMainContent = function() {
             taskDescription.textContent = currentTask.description;
             descriptionContainer.appendChild(taskDescription);
 
-            taskContainer.appendChild(descriptionContainer);
+            // taskContainer.appendChild(descriptionContainer);
         }
         
-        const dueDateContainer = document.createElement('div');
-        dueDateContainer.classList.add('due-date-container');
+        // const dueDateContainer = document.createElement('div');
+        // dueDateContainer.classList.add('due-date-container');
 
         const taskDueDate = document.createElement('p');
         taskDueDate.classList.add('task-due-date');
         taskDueDate.textContent = currentTask.dueDate.toDateString();
-        dueDateContainer.appendChild(taskDueDate);
-        taskContainer.appendChild(dueDateContainer);
+        taskHeaderRightSide.appendChild(taskDueDate);
         
         //TODO: create btn container
         //TODO: create edit btn
