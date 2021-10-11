@@ -43,14 +43,23 @@ const changeMainContent = function() {
         taskCheckbox.setAttribute('type', 'checkbox');
         taskCheckbox.classList.add('task-checkbox');
         taskCheckbox.id = `${taskTitle}-checkbox`;
+        checkLabelContainer.appendChild(taskCheckbox);
 
         const taskLabel = document.createElement('label');
         taskLabel.classList.add("task-label");
         taskLabel.setAttribute('for', `${taskTitle}-checkbox`);
         taskLabel.textContent = currentTask.title;
-
-        checkLabelContainer.appendChild(taskCheckbox);
         checkLabelContainer.appendChild(taskLabel);
+
+        if (displayedProject.title === 'Today' || displayedProject.title === 'This week') {
+            const projectReminder = document.createElement('p');
+            projectReminder.classList.add('project-reminder');
+            projectReminder.textContent = `(${currentTask.originalProject.title})`;
+            checkLabelContainer.appendChild(projectReminder);
+        }
+
+        
+        
 
         taskContainer.appendChild(checkLabelContainer);
         
@@ -80,13 +89,7 @@ const changeMainContent = function() {
         taskDueDate.textContent = currentTask.dueDate.toDateString();
         dueDateContainer.appendChild(taskDueDate);
         
-        if (displayedProject.title === 'Today' || displayedProject.title === 'This week') {
-            const projectReminder = document.createElement('p');
-            projectReminder.classList.add('project-reminder');
-            console.log(currentTask);
-            projectReminder.textContent = currentTask.originalProject.title;
-            dueDateContainer.appendChild(projectReminder);
-        }
+        
         
         taskContainer.appendChild(dueDateContainer);
 
