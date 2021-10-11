@@ -13,6 +13,14 @@ const handleAddTaskBtnClick = function(e) {
     events.emit('addTaskBtnClicked', btn);
 }
 
+const toggleDescriptionDisplay = function(e) {
+    const descriptionBtn = e.target;
+    const descriptionContainer = descriptionBtn.parentElement;
+    const taskDescription = descriptionContainer.querySelector('.task-description');
+    taskDescription.classList.toggle('hidden');
+    descriptionBtn.textContent = taskDescription.classList.contains('hidden') ? 'Show Description' : 'Hide Description';
+}
+
 const changeMainContent = function() {
     mainContent.textContent = '';
 
@@ -71,20 +79,22 @@ const changeMainContent = function() {
 
         // Check for a task description
         if (currentTask.description) {
+            // Create description container
             const descriptionContainer = document.createElement('div');
             descriptionContainer.classList.add('description-container');
 
             const descriptionBtn = document.createElement('button');
             descriptionBtn.classList.add('description-btn');
             descriptionBtn.textContent = 'Show Description';
-            descriptionBtn.addEventListener('click', () => {
-                alert(taskDescription.textContent);
-            });
+            descriptionBtn.addEventListener('click', toggleDescriptionDisplay);
             descriptionContainer.appendChild(descriptionBtn);
             
             const taskDescription = document.createElement('p');
             taskDescription.classList.add('task-description');
+            taskDescription.classList.add('hidden');
             taskDescription.textContent = currentTask.description;
+            descriptionContainer.appendChild(taskDescription);
+
             taskContainer.appendChild(descriptionContainer);
         }
         
@@ -97,7 +107,10 @@ const changeMainContent = function() {
         dueDateContainer.appendChild(taskDueDate);
         taskContainer.appendChild(dueDateContainer);
         
-        
+        //TODO: create btn container
+        //TODO: create edit btn
+        //TODO: create settings btn
+
         
 
         tasksContainer.appendChild(taskContainer);
