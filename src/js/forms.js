@@ -5,12 +5,12 @@ import { Task } from './task.js';
 const forms = (function() {
     const overlay = document.querySelector('.overlay');
     
-    function closeForm() {
+    const closeForm = function() {
         overlay.textContent = '';
         overlay.classList.add('hidden');
     }
     
-    function openForm(btn) {
+    const openForm = function(btn) {
         const formContainer = document.createElement('div');
         formContainer.classList.add('form-container');
 
@@ -87,7 +87,7 @@ const forms = (function() {
     events.on('addProjectBtnClicked', openForm);
     events.on('addTaskBtnClicked', openForm);
     
-    function submitForm(e) {
+    const submitForm = function(e) {
         e.preventDefault();
         const form = e.target;
         const formClasses = [...form.classList];
