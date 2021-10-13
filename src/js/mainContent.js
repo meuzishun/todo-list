@@ -1,4 +1,5 @@
 import { events } from './events.js';
+import { markup } from './markup.js';
 
 const mainContent = document.querySelector('main');
 
@@ -27,10 +28,11 @@ const changeMainContent = function() {
     mainContent.textContent = '';
 
     // Create the container for the project
-    const projectContainer = document.createElement('div');
+    // const projectContainer = document.createElement('div');
     const projectTitleAsClassName = displayedProject.title.replace(/\s/g, '-');
-    projectContainer.classList.add(`${projectTitleAsClassName}-container`);
-    projectContainer.classList.add(`project-container`);
+    // projectContainer.classList.add(`${projectTitleAsClassName}-container`);
+    // projectContainer.classList.add(`project-container`);
+    const projectContainer = markup.elementBuilder('div', [`${projectTitleAsClassName}-container`, 'project-container']);
 
     // Give the project a heading
     const projectHeading = document.createElement('h2');
@@ -135,6 +137,10 @@ const changeMainContent = function() {
         taskHeaderRightSide.appendChild(taskDueDate);
         
         //TODO: create btn container
+        const editBtn = document.createElement('button');
+        editBtn.classList.add('fa');
+        editBtn.classList.add('fa-ellipsis-h');
+        taskHeaderRightSide.appendChild(editBtn);
         //TODO: create edit btn
         //TODO: create settings btn
 

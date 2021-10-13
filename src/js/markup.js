@@ -1,15 +1,23 @@
 
 const markup = (function() {
-    function elementBuilder(element, classList) {
+    function elementBuilder(element, classList, text) {
         const elem = document.createElement(element);
-        if (typeof classList === 'object') {
-            for (const className of classList) {
-                elem.classList.add(className);
+        
+        if (classList) {
+            if (typeof classList === 'object') {
+                for (const className of classList) {
+                    elem.classList.add(className);
+                }
+            }
+            if (typeof classList === 'string') {
+                elem.classList.add(classList);
             }
         }
-        if (typeof classList === 'string') {
-            elem.classList.add(classList);
+
+        if (text) {
+            elem.textContent = text;
         }
+        
         return elem;
     }
     

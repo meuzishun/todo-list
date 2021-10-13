@@ -170,8 +170,23 @@ body {
 						}
 
 						.task-header-right-side {
+							display: flex;
+							flex-direction: row;
+							gap: 1rem;
+
 							.task-due-date {
 								font-size: 1.2rem;
+							}
+
+							button {
+								padding: 0;
+								width: 2rem;
+								text-align: center;
+								background-color: $transparent;
+
+								&:hover {
+									background-color: $dark-grey-color;
+								}
 							}
 						}
 					}

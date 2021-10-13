@@ -4,55 +4,80 @@ import { Project } from "./project.js";
 const navbar = (function() {
     const navbar = document.querySelector('nav');
 
+    const createStaticNavBtn = function(name) {
+        const iconClassLookup = {
+            'inbox': 'fa-inbox',
+            'today': 'fa-calendar-o',
+            'this week': 'fa-calendar'
+        }
+
+        const textListLookup = {
+            'inbox': 'Inbox',
+            'today': 'Today',
+            'this week': 'This week'
+        }
+
+        const btn = document.createElement('button');
+        btn.classList.add(`${name === 'this week' ? 'this-week' : 'none'}`);
+
+        const icon = document.createElement('i');
+        icon.classList.add('fa');
+        icon.classList.add(`${iconClassLookup[name]}`);
+
+        const text = document.createTextNode(` ${textListLookup[name]}`);
+
+        const proj = new Project(`${textListLookup[name]}`);
+        events.emit('staticProjectCreated', proj);
+
+        btn.project = proj;
+
+        
+
+        
+        
+        if (name === 'inbox') {
+            // btn.classList.add('inbox');
+            // icon.classList.add('fa-inbox');
+            // text = document.createTextNode(' Inbox');
+            // const inbox = new Project('Inbox');
+            // events.emit('staticProjectCreated', inbox);
+            events.emit('documentLoaded', proj);
+            // btn.project = inbox;
+        }
+        
+        if (name === 'today') {
+            // btn.classList.add('today');
+            // icon.classList.add('fa-calendar-o');
+            // text = document.createTextNode(' Today');
+            // const today = new Project('Today');
+            // events.emit('staticProjectCreated', today);
+            events.on('todaysTasksAssembled', (tasks) => {
+                proj.tasks = tasks;
+            });
+            // btn.project = today;
+        }
+        
+        if (name === 'this week') {
+            // btn.classList.add('this-week');
+            // icon.classList.add('fa-calendar');
+            // text = document.createTextNode(' This week');
+            // const thisWeek = new Project('This week');
+            // events.emit('staticProjectCreated', thisWeek);
+            events.on('thisWeeksTasksAssembled', (tasks) => {
+                proj.tasks = tasks;
+            });
+            // btn.project = thisWeek;
+        }
+
+        btn.appendChild(icon);
+        btn.appendChild(text);
+        btn.addEventListener('click', handleProjectBtnClick);
+        return btn;
+    }
+
     const createStaticNav = function() {
         const staticNavContainer = document.createElement('div');
         staticNavContainer.classList.add('static-nav');
-
-        const createStaticNavBtn = function(name) {
-            const btn = document.createElement('button');
-            const icon = document.createElement('i');
-            icon.classList.add('fa');
-            let text;
-            
-            if (name === 'inbox') {
-                btn.classList.add('inbox');
-                icon.classList.add('fa-inbox');
-                text = document.createTextNode(' Inbox');
-                const inbox = new Project('Inbox');
-                events.emit('staticProjectCreated', inbox);
-                events.emit('documentLoaded', inbox);
-                btn.project = inbox;
-            }
-            
-            if (name === 'today') {
-                btn.classList.add('today');
-                icon.classList.add('fa-calendar-o');
-                text = document.createTextNode(' Today');
-                const today = new Project('Today');
-                events.emit('staticProjectCreated', today);
-                events.on('todaysTasksAssembled', (tasks) => {
-                    today.tasks = tasks;
-                });
-                btn.project = today;
-            }
-            
-            if (name === 'this week') {
-                btn.classList.add('this-week');
-                icon.classList.add('fa-calendar');
-                text = document.createTextNode(' This week');
-                const thisWeek = new Project('This week');
-                events.emit('staticProjectCreated', thisWeek);
-                events.on('thisWeeksTasksAssembled', (tasks) => {
-                    thisWeek.tasks = tasks;
-                });
-                btn.project = thisWeek;
-            }
-
-            btn.appendChild(icon);
-            btn.appendChild(text);
-            btn.addEventListener('click', handleProjectBtnClick);
-            return btn;
-        }
 
         const inboxBtn = createStaticNavBtn('inbox');
         const todayBtn = createStaticNavBtn('today');
@@ -95,18 +120,12 @@ const navbar = (function() {
         return [ projectsNavContainer, userProjects ];
     }
 
-    const staticNav = createStaticNav();
-    navbar.appendChild(staticNav);
-
-    const [ projectsNav, userProjects ] = createProjectsNav();
-    navbar.appendChild(projectsNav);
-
-    function handleAddProjectBtnClick(e) {
+    const handleAddProjectBtnClick = function(e) {
         const btn = e.target;
         events.emit('addProjectBtnClicked', btn);
     }
     
-    function clearSelectedBtns() {
+    const clearSelectedBtns = function() {
         const navBtns = navbar.querySelectorAll('button');
         navBtns.forEach(btn => {
             if (btn.classList.contains('selected')) {
@@ -115,7 +134,7 @@ const navbar = (function() {
         });
     }
 
-    function handleProjectBtnClick(e) {
+    const handleProjectBtnClick = function(e) {
         const projectBtn = e.target;
         clearSelectedBtns();
         projectBtn.classList.add('selected');
@@ -125,7 +144,7 @@ const navbar = (function() {
     }
 
 
-    function createProjectBtn(project) {
+    const createProjectBtn = function(project) {
         const btn = document.createElement('button');
         //? Should we be attaching the project to the btn like this?
         btn.project = project;
@@ -134,13 +153,19 @@ const navbar = (function() {
         return btn;
     }
     
-    function updateUserProjectBtnList(projects) {
+    const updateUserProjectBtnList = function(projects) {
         userProjects.textContent = '';
         for (const key in projects) {
             const btn = createProjectBtn(projects[key]);
             userProjects.appendChild(btn);
         }
     }
+
+    const staticNav = createStaticNav();
+    navbar.appendChild(staticNav);
+
+    const [ projectsNav, userProjects ] = createProjectsNav();
+    navbar.appendChild(projectsNav);
 
     events.on('userProjectListUpdated', updateUserProjectBtnList);
     
