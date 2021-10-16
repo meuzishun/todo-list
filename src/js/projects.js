@@ -1,5 +1,16 @@
 import { events } from './events.js';
 
+class Project {
+    constructor(title) {
+        this.title = title;
+        this.tasks = {};
+    }
+
+    addTask(task) {
+        this.tasks[task.title] = task;
+    }
+}
+
 const projects = (function() {
     const staticProjects = {};
     const userProjects = {};
@@ -46,6 +57,14 @@ const projects = (function() {
         task.originalProject = currentProject.title;
         currentProject.addTask(task);
     }
+
+    const createNewProject = function(data) {
+        const project = new Project(...data);
+        storeUserProject(project);
+        // emit the updated list of projects
+    }
+
+    events.on('newProjectDataSubmitted', createNewProject);
 
     
     events.on('staticProjectCreated', storeStaticProject);

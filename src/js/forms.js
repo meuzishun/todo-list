@@ -1,5 +1,5 @@
 import { events } from './events.js';
-import { Project } from './project.js';
+// import { Project } from './project.js';
 import { Task } from './task.js';
 
 const forms = (function() {
@@ -82,6 +82,7 @@ const forms = (function() {
         form.appendChild(submitBtn);
         overlay.appendChild(formContainer);
         overlay.classList.toggle('hidden');
+        titleOrNameInput.focus();
     }
     
     events.on('addProjectBtnClicked', openForm);
@@ -93,15 +94,15 @@ const forms = (function() {
         const formClasses = [...form.classList];
         const inputs = [...form.querySelectorAll('input')];
         inputs.pop();
-        const values = inputs.map(input => input.value);
+        const data = inputs.map(input => input.value);
 
         if (formClasses.includes('new-project-form')) {
-            const project = new Project(...values);
-            events.emit('newUserProjectCreated', project);
+            // const project = new Project(...values);
+            events.emit('newProjectDataSubmitted', data);
         }
         
         if (formClasses.includes('new-task-form')) {
-            const task = new Task(...values);
+            const task = new Task(...data);
             const realDate = task.dueDate.split('-').map(num => +num);
             realDate[1]--;
             task.dueDate = new Date(...realDate);
