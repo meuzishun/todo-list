@@ -24,7 +24,7 @@ const toggleDescriptionDisplay = function(e) {
     descriptionBtn.textContent = descriptionContainer.classList.contains('hidden') ? 'Show Description' : 'Hide Description';
 }
 
-const changeMainContent = function() {
+const renderMainContent = function(project) {
     mainContent.textContent = '';
 
     // Create the container for the project
@@ -169,11 +169,11 @@ const changeMainContent = function() {
 }
 
 events.on('documentLoaded', setDisplayedProject);
-events.on('documentLoaded', changeMainContent);
+events.on('documentLoaded', renderMainContent);
 
 events.on('projectBtnClicked', setDisplayedProject);
-events.on('projectBtnClicked', changeMainContent);
+events.on('projectBtnClicked', renderMainContent);
 
-events.on('newTaskCreated', changeMainContent);
+events.on('newTaskCreated', renderMainContent);
 
 export { mainContent };

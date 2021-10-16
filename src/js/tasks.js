@@ -1,9 +1,11 @@
 import { events } from './events.js';
+import { state } from './state.js';
 
 const tasks = (function() {
     const tasks = {};
     
     function storeTask(task) {
+        // state.displayedProject.addTask(task);
         tasks[task.title] = task;
         events.emit('taskListUpdated', tasks);
     }
