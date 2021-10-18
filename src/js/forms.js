@@ -1,6 +1,6 @@
+
 import { events } from './events.js';
 import { markup } from './markup.js';
-import { Task } from './task.js';
 
 const forms = (function() {
     const overlay = document.querySelector('.overlay');

@@ -60,7 +60,7 @@ const projects = (function() {
         events.emit('currentProjectTasksUpdated', currentProject);
     }
 
-    const createNewProject = function(data) {
+    const createUserProject = function(data) {
         const project = new Project(...data);
         storeUserProject(project);
     }
@@ -76,12 +76,10 @@ const projects = (function() {
         return project;
     }
 
-    events.on('newProjectDataSubmitted', createNewProject);
+    events.on('newProjectDataSubmitted', createUserProject);
     events.on('staticProjectBtnCreated', createStaticProject);
-    events.on('newUserProjectCreated', storeUserProject);
     events.on('projectBtnClicked', setCurrentProject);
     events.on('newTaskCreated', storeTaskInCurrentProject);
-    events.on('documentLoaded', setCurrentProject);
     events.on('taskListUpdated', populateUpcoming);
 })();
 
