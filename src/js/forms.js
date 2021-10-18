@@ -99,11 +99,12 @@ const forms = (function() {
         }
         
         if (formClasses.includes('new-task-form')) {
-            const task = new Task(...data);
-            const realDate = task.dueDate.split('-').map(num => +num);
-            realDate[1]--;
-            task.dueDate = new Date(...realDate);
-            events.emit('newTaskCreated', task);
+            // const task = new Task(...data);
+            // const realDate = task.dueDate.split('-').map(num => +num);
+            // realDate[1]--;
+            // task.dueDate = new Date(...realDate);
+            // events.emit('newTaskCreated', task);
+            events.emit('newTaskDataSubmitted', data);
         } 
 
         closeForm();

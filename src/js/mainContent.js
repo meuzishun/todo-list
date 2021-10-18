@@ -67,12 +67,17 @@ const renderMainContent = function(project) {
             const taskDescription = markup.elementBuilder('p', ['task-description', 'hidden'], currentTask.description);
             descriptionContainer.appendChild(taskDescription);
         }
+
+        if (currentTask.dueDate) {
+            const taskDueDate = markup.elementBuilder('p', 'task-due-date', currentTask.dueDate.toDateString());
+            // const taskDueDate = markup.elementBuilder('p', 'task-due-date', currentTask.dueDate);
+            taskHeaderRightSide.appendChild(taskDueDate);
+        }
         
-        const taskDueDate = markup.elementBuilder('p', 'task-due-date', currentTask.dueDate.toDateString());
         
         const editBtn = markup.elementBuilder('button', ['fa', 'fa-ellipsis-h']);
         
-        markup.appendChildren([taskDueDate, editBtn], taskHeaderRightSide);
+        markup.appendChildren([editBtn], taskHeaderRightSide);
 
         tasksContainer.appendChild(taskContainer);
     }
@@ -91,8 +96,10 @@ const renderMainContent = function(project) {
 
 }
 
-events.on('documentLoaded', renderMainContent);
-events.on('newTaskCreated', renderMainContent);
+// events.on('documentLoaded', renderMainContent);
+// events.on('newTaskCreated', renderMainContent);
 events.on('currentProjectSet', renderMainContent);
+events.on('currentProjectTasksUpdated', renderMainContent);
+
 
 export { mainContent };

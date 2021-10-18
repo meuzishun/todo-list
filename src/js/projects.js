@@ -16,48 +16,48 @@ const projects = (function() {
     const userProjects = {};
     let currentProject = null;
     
-    function setCurrentProject(projectBtn) {
+    const setCurrentProject = function(projectBtn) {
         const project = findProject(projectBtn);
         currentProject = project;
         events.emit('currentProjectSet', currentProject);
     }
 
-    function storeStaticProject(project) {
+    const storeStaticProject = function(project) {
         staticProjects[project.title] = project;
         events.emit('staticProjectListUpdated', staticProjects);
     }
 
-    function storeUserProject(project) {
+    const storeUserProject = function(project) {
         userProjects[project.title] = project;
         events.emit('userProjectListUpdated', userProjects);
     }
 
-    function formatDate(date) {
-        const dateSplit = date.split('-');
-        const dateNums = dateSplit.map(item => +item);
-        const dateFormatted = new Date([...dateNums]).toDateString();
-        return dateFormatted;
+    const getTodaysTasks = function(now, tasks) {
+        const todaysDateFormatted = now.toDateString();
+        const todaysTasks = Object.values(tasks).filter(task => todaysDateFormatted === task.dueDate.toDateString());
+        todaysTasks.forEach(task => staticProjects['Today'].addTask(task));
     }
-    //TODO: check date for task and if it is today, store in today as well... same for this week
-    function fillToday() {
-        const todaysDate = new Date().toDateString();
-
-        for (const project in userProjects) {
-            for (const task in userProjects[project].tasks) {
-                const dueDate = formatDate(userProjects[project].tasks[task].dueDate);
-
-                //TODO: put in this week... we need to find a way to get the day see if it is within 7... maybe wait to toDateString()?
-
-                if (dueDate === todaysDate) {
-                    staticProjects['Today'].addTask(userProjects[project].tasks[task]);
-                }
-            }
-        }
+    
+    const getThisWeeksTasks = function(now, tasks) {
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const endOfWeek = new Date();
+        const todaysDate = today.getDate();
+        const sevenDaysFromToday = todaysDate + 6;
+        endOfWeek.setDate(sevenDaysFromToday);
+        const thisWeeksTasks = Object.values(tasks).filter(task => task.dueDate.getTime() < endOfWeek.getTime() && task.dueDate.getTime() >= today.getTime());
+        thisWeeksTasks.forEach(task => staticProjects['This week'].addTask(task));
     }
 
-    function storeTask(task) {
+    const populateUpcoming = function(tasks) {
+        const now = new Date();
+        getTodaysTasks(now, tasks);
+        getThisWeeksTasks(now, tasks);
+    }
+
+    const storeTaskInCurrentProject = function(task) {
         task.originalProject = currentProject.title;
         currentProject.addTask(task);
+        events.emit('currentProjectTasksUpdated', currentProject);
     }
 
     const createNewProject = function(data) {
@@ -78,14 +78,11 @@ const projects = (function() {
 
     events.on('newProjectDataSubmitted', createNewProject);
     events.on('staticProjectBtnCreated', createStaticProject);
-
-    
-    // events.on('staticProjectCreated', storeStaticProject);
     events.on('newUserProjectCreated', storeUserProject);
-    // events.on('projectBtnClicked', setCurrentProject);
     events.on('projectBtnClicked', setCurrentProject);
-    events.on('newTaskCreated', storeTask);
+    events.on('newTaskCreated', storeTaskInCurrentProject);
     events.on('documentLoaded', setCurrentProject);
+    events.on('taskListUpdated', populateUpcoming);
 })();
 
 export { projects };
