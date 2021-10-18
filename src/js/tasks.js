@@ -1,6 +1,16 @@
 import { events } from './events.js';
 import { state } from './state.js';
 
+class Task {
+    constructor(title, description, dueDate) {
+        this.title = title;
+        this.description = description;
+        this.dueDate = dueDate;
+        this.complete = false;
+        // this.originalProject = originalProject;
+    }
+}
+
 const tasks = (function() {
     const tasks = {};
     

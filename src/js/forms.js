@@ -1,5 +1,5 @@
 import { events } from './events.js';
-// import { Project } from './project.js';
+import { markup } from './markup.js';
 import { Task } from './task.js';
 
 const forms = (function() {
@@ -11,21 +11,17 @@ const forms = (function() {
     }
     
     const openForm = function(btn) {
-        const formContainer = document.createElement('div');
-        formContainer.classList.add('form-container');
+        const formContainer = markup.elementBuilder('div', 'form-container');
+        const closeBtn = markup.elementBuilder('p', 'form-close-btn');
+        const removeIcon = markup.elementBuilder('i', ['fa', 'fa-remove']);
 
-        const closeBtn = document.createElement('p');
-        closeBtn.classList.add('form-close-btn');
-
-        const removeIcon = document.createElement('i');
-        removeIcon.classList.add('fa');
-        removeIcon.classList.add('fa-remove');
         closeBtn.appendChild(removeIcon);
         closeBtn.addEventListener('click', closeForm);
-        closeBtn.appendChild(removeIcon);
+
         formContainer.appendChild(closeBtn);
 
         const heading = document.createElement('h2');
+
         formContainer.appendChild(heading);
 
         const form = document.createElement('form');
@@ -34,6 +30,7 @@ const forms = (function() {
         titleOrNameInput.setAttribute('type', 'text');
         titleOrNameInput.required = true;
         form.appendChild(titleOrNameInput);
+        
         formContainer.appendChild(form);
         
         const submitBtn = document.createElement('input');

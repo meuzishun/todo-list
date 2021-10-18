@@ -1,5 +1,5 @@
 import { events } from "./events.js";
-import { Project } from "./project.js";
+import { markup } from "./markup.js";
 
 const navbar = (function() {
     const navbar = document.querySelector('nav');
@@ -7,98 +7,62 @@ const navbar = (function() {
     const createStaticNavBtn = function(name) {
         const btnInfoLookup = {
             'inbox': {
+                btnClass: 'inbox',
                 iconClass: 'fa-inbox',
                 text: 'Inbox',
             },
             'today': {
+                btnClass: 'today',
                 iconClass: 'fa-calendar-o',
                 text: 'Today',
             },
             'this week': {
+                btnClass: 'this-week',
                 iconClass: 'fa-calendar',
                 text: 'This week',
             }
         }
 
-        const btn = document.createElement('button');
-        btn.classList.add(`${name === 'this week' ? 'this-week' : 'none'}`);
+        const btn = markup.elementBuilder('button', `${btnInfoLookup[name].btnClass}`);
 
-        const icon = document.createElement('i');
-        icon.classList.add('fa');
-        icon.classList.add(`${btnInfoLookup[name].iconClass}`);
+        const icon = markup.elementBuilder('i', ['fa', `${btnInfoLookup[name].iconClass}`]);
 
-        const text = document.createTextNode(` ${btnInfoLookup[name].text}`);
+        const text = btnInfoLookup[name].text;
+        const textNode = document.createTextNode(text);
 
-        const proj = new Project(`${btnInfoLookup[name].text}`);
-        events.emit('staticProjectCreated', proj);
-
-        btn.project = proj;
-        
-        if (name === 'inbox') {
-            events.emit('documentLoaded', proj);
-        }
-        
-        if (name === 'today') {
-            events.on('todaysTasksAssembled', (tasks) => {
-                proj.tasks = tasks;
-            });
-        }
-        
-        if (name === 'this week') {
-            events.on('thisWeeksTasksAssembled', (tasks) => {
-                proj.tasks = tasks;
-            });
-        }
-
-        btn.appendChild(icon);
-        btn.appendChild(text);
+        markup.appendChildren([icon, textNode], btn);
         btn.addEventListener('click', handleProjectBtnClick);
+        events.emit('staticProjectBtnCreated', text);
+
         return btn;
     }
 
     const createStaticNav = function() {
-        const staticNavContainer = document.createElement('div');
-        staticNavContainer.classList.add('static-nav');
+        const staticNavContainer = markup.elementBuilder('div', 'static-nav');
 
         const inboxBtn = createStaticNavBtn('inbox');
         const todayBtn = createStaticNavBtn('today');
         const thisWeekBtn = createStaticNavBtn('this week');
 
-        staticNavContainer.appendChild(inboxBtn);
-        staticNavContainer.appendChild(todayBtn);
-        staticNavContainer.appendChild(thisWeekBtn);
+        markup.appendChildren([inboxBtn, todayBtn, thisWeekBtn], staticNavContainer);
 
         return staticNavContainer;
     }
 
     const createProjectsNav = function() {
-        const projectsNavContainer = document.createElement('div');
-        projectsNavContainer.classList.add('projects-nav');
+        const projectsNavContainer = markup.elementBuilder('div', 'projects-nav');
 
-        const heading = document.createElement('h3');
-        heading.textContent = 'Projects';
+        const heading = markup.elementBuilder('h3', null, 'Projects');
+        const userProjects = markup.elementBuilder('div', 'user-projects');
+        const addProjBtn = markup.elementBuilder('button', 'add-project-btn');
+        const addIcon = markup.elementBuilder('i', ['fa', 'fa-plus']);
+        const addProjectText = document.createTextNode('Add Project');
 
-        const userProjects = document.createElement('div');
-        userProjects.classList.add('user-projects');
-
-        const addProjectBtn = document.createElement('button');
-        addProjectBtn.classList.add('add-project-btn');
-
-        const addIcon = document.createElement('i');
-        addIcon.classList.add('fa');
-        addIcon.classList.add('fa-plus');
-
-        const addProjectText = document.createTextNode(' Add Project');
-
-        addProjectBtn.appendChild(addIcon);
-        addProjectBtn.appendChild(addProjectText);
-        addProjectBtn.addEventListener('click', handleAddProjectBtnClick);
-
-        projectsNavContainer.appendChild(heading);
-        projectsNavContainer.appendChild(userProjects);
-        projectsNavContainer.appendChild(addProjectBtn);
-
-        return [ projectsNavContainer, userProjects ];
+        markup.appendChildren([addIcon, addProjectText], addProjBtn);
+        addProjBtn.addEventListener('click', handleAddProjectBtnClick);
+        markup.appendChildren([heading, userProjects, addProjBtn], projectsNavContainer);
+        
+        return projectsNavContainer;
     }
 
     const handleAddProjectBtnClick = function(e) {
@@ -115,15 +79,16 @@ const navbar = (function() {
         });
     }
 
+    const selectBtn = function(projectBtn) {
+        projectBtn.classList.add('selected');
+        events.emit('projectBtnClicked', projectBtn);
+    }
+
     const handleProjectBtnClick = function(e) {
         const projectBtn = e.target;
         clearSelectedBtns();
-        projectBtn.classList.add('selected');
-        //? Should we be attaching the project to the btn like this?
-        const project = projectBtn.project;
-        events.emit('projectBtnClicked', project);
+        selectBtn(projectBtn);
     }
-
 
     const createProjectBtn = function(project) {
         const btn = document.createElement('button');
@@ -135,6 +100,7 @@ const navbar = (function() {
     }
     
     const updateUserProjectBtnList = function(projects) {
+        const userProjects = projectsNav.querySelector('.user-projects');
         userProjects.textContent = '';
         for (const key in projects) {
             const btn = createProjectBtn(projects[key]);
@@ -142,14 +108,20 @@ const navbar = (function() {
         }
     }
 
-    const staticNav = createStaticNav();
-    navbar.appendChild(staticNav);
-
-    const [ projectsNav, userProjects ] = createProjectsNav();
-    navbar.appendChild(projectsNav);
+    const init = function() {
+        const inboxBtn = staticNav.querySelector('.inbox');
+        selectBtn(inboxBtn);
+    }
 
     events.on('userProjectListUpdated', updateUserProjectBtnList);
-    
+
+    const staticNav = createStaticNav();
+    const projectsNav = createProjectsNav();
+
+    markup.appendChildren([staticNav, projectsNav], navbar);
+
+    init();
+
 })();
 
 export { navbar };

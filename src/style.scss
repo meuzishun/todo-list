@@ -66,6 +66,9 @@ body {
 			gap: 0.5rem;
 
 			button {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
 				background-color: $transparent;
 
 				&:hover {
@@ -227,6 +230,9 @@ body {
 			}
 
 			.add-task-btn {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
 				background-color: $transparent;
 
 				&:hover {

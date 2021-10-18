@@ -16,8 +16,10 @@ const projects = (function() {
     const userProjects = {};
     let currentProject = null;
     
-    function setCurrentProject(project) {
+    function setCurrentProject(projectBtn) {
+        const project = findProject(projectBtn);
         currentProject = project;
+        events.emit('currentProjectSet', currentProject);
     }
 
     function storeStaticProject(project) {
@@ -61,14 +63,26 @@ const projects = (function() {
     const createNewProject = function(data) {
         const project = new Project(...data);
         storeUserProject(project);
-        // emit the updated list of projects
+    }
+
+    const createStaticProject = function(text) {
+        const project = new Project(text);
+        storeStaticProject(project);
+    }
+
+    const findProject = function(projectBtn) {
+        const title = projectBtn.innerText;
+        const project = staticProjects[title] || userProjects[title];
+        return project;
     }
 
     events.on('newProjectDataSubmitted', createNewProject);
+    events.on('staticProjectBtnCreated', createStaticProject);
 
     
-    events.on('staticProjectCreated', storeStaticProject);
+    // events.on('staticProjectCreated', storeStaticProject);
     events.on('newUserProjectCreated', storeUserProject);
+    // events.on('projectBtnClicked', setCurrentProject);
     events.on('projectBtnClicked', setCurrentProject);
     events.on('newTaskCreated', storeTask);
     events.on('documentLoaded', setCurrentProject);
