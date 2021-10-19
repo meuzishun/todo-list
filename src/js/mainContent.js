@@ -21,6 +21,7 @@ const toggleDescriptionDisplay = function(e) {
 
 const renderMainContent = function(project) {
     mainContent.textContent = '';
+    console.log(project);
 
     const projectTitleAsClassName = project.title.replace(/\s/g, '-');
     const projectContainer = markup.elementBuilder('div', [`${projectTitleAsClassName}-container`, 'project-container']);
@@ -56,7 +57,7 @@ const renderMainContent = function(project) {
         markup.appendChildren([taskCheckbox, taskLabel], taskHeaderLeftSide);
 
         if (project.title === 'Today' || project.title === 'This week') {
-            const projectReminder = document.createElement('p', 'project-reminder', currentTask.originalProject);
+            const projectReminder = document.createElement('p', 'project-reminder', project.title);
             taskHeaderLeftSide.appendChild(projectReminder);
         }
 
@@ -71,7 +72,6 @@ const renderMainContent = function(project) {
 
         if (currentTask.dueDate) {
             const taskDueDate = markup.elementBuilder('p', 'task-due-date', currentTask.dueDate.toDateString());
-            // const taskDueDate = markup.elementBuilder('p', 'task-due-date', currentTask.dueDate);
             taskHeaderRightSide.appendChild(taskDueDate);
         }
         
