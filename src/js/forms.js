@@ -94,16 +94,10 @@ const forms = (function() {
         const data = inputs.map(input => input.value);
 
         if (formClasses.includes('new-project-form')) {
-            // const project = new Project(...values);
             events.emit('newProjectDataSubmitted', data);
         }
         
         if (formClasses.includes('new-task-form')) {
-            // const task = new Task(...data);
-            // const realDate = task.dueDate.split('-').map(num => +num);
-            // realDate[1]--;
-            // task.dueDate = new Date(...realDate);
-            // events.emit('newTaskCreated', task);
             events.emit('newTaskDataSubmitted', data);
         } 
 

@@ -97,10 +97,7 @@ const renderMainContent = function(project) {
 
 }
 
-// events.on('documentLoaded', renderMainContent);
-// events.on('newTaskCreated', renderMainContent);
 events.on('currentProjectSet', renderMainContent);
 events.on('currentProjectTasksUpdated', renderMainContent);
-
 
 export { mainContent };

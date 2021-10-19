@@ -15,9 +15,11 @@ const tasks = (function() {
 
     const createNewTask = function(data) {
         const task = new Task(...data);
-        const realDate = task.dueDate.split('-').map(num => +num);
-        realDate[1]--;
-        task.dueDate = new Date(...realDate);
+        if (task.dueDate) {
+            const realDate = task.dueDate.split('-').map(num => +num);
+            realDate[1]--;
+            task.dueDate = new Date(...realDate);
+        }
         events.emit('newTaskCreated', task);
         storeTask(task);
     }
