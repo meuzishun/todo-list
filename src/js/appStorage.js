@@ -25,23 +25,6 @@ class Project {
 }
 
 const appStorage = {
-    // props: {
-    //     selectedProject: 'inbox',
-
-    // },
-    // setSelectedProj: function(project) {
-    //     this.props.selectedProject = project;
-    // },
-    // getSelectionProj: function() {
-    //     return this.props.selectedProject;
-    // },
-
-    // properties: {
-    //     projects: {},
-    //     tasks: {},
-
-    // }
-
     properties: {
 
         projects: {
