@@ -26,19 +26,7 @@ class Project {
 
 const appStorage = {
     properties: {
-        projects: {
-            // 'inbox': {
-            //     title: 'inbox',
-            //     tasks: {},
-            //     getTasks: function() {},
-            //     addTask: function() {},
-            //     removeTask: function() {},
-            // },
-            // 'today': {},
-            // 'this week': {},
-            // 'my project 1': {},
-            // 'my project 2': {},
-        },
+        projects: {},
         getProjects: function() {
             return this.projects;
         },
