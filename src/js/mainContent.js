@@ -21,7 +21,6 @@ const toggleDescriptionDisplay = function(e) {
 
 const renderMainContent = function(project) {
     mainContent.textContent = '';
-    console.log(project);
 
     const projectTitleAsClassName = project.title.replace(/\s/g, '-');
     const projectContainer = markup.elementBuilder('div', [`${projectTitleAsClassName}-container`, 'project-container']);

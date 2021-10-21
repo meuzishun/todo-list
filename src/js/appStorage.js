@@ -28,27 +28,27 @@ const appStorage = {
     properties: {
 
         projects: {
-            'inbox': {
-                title: 'inbox',
-                tasks: {},
-                getTasks: function() {},
-                addTask: function() {},
-                removeTask: function() {},
-            },
-            'today': {},
-            'this week': {},
-            'my project 1': {},
-            'my project 2': {},
+            // 'inbox': {
+            //     title: 'inbox',
+            //     tasks: {},
+            //     getTasks: function() {},
+            //     addTask: function() {},
+            //     removeTask: function() {},
+            // },
+            // 'today': {},
+            // 'this week': {},
+            // 'my project 1': {},
+            // 'my project 2': {},
         },
         getProjects: function() {
-            return properties.projects;
+            return appStorage.properties.projects;
         },
         addProject: function(title) {
             const project = new Project(title);
-            properties[project.title] = project;
+            appStorage.properties.projects[project.title] = project;
         },
         removeProject: function(project) {}
     }
 };
 
-// export { appStorage };
+export { appStorage };
