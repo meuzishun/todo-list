@@ -15,7 +15,14 @@ function logData(data) {
     console.log(data);
 }
 
-appStorage.properties.addProject('Test Project');
+appStorage.properties.addProject('Inbox');
+appStorage.properties.addProject('Today');
+appStorage.properties.addProject('This week');
+appStorage.properties.projects['Inbox'].addTask({
+    title: 'Make todo list',
+    dueDate: '10-21-1981',
+    description: 'this is the description'
+});
 console.log(appStorage.properties.getProjects());
 
 // const testElement1 = markup.elementBuilder('h1', 'test-heading');

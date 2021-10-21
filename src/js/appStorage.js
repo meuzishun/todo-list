@@ -26,7 +26,6 @@ class Project {
 
 const appStorage = {
     properties: {
-
         projects: {
             // 'inbox': {
             //     title: 'inbox',
@@ -41,11 +40,11 @@ const appStorage = {
             // 'my project 2': {},
         },
         getProjects: function() {
-            return appStorage.properties.projects;
+            return this.projects;
         },
         addProject: function(title) {
             const project = new Project(title);
-            appStorage.properties.projects[project.title] = project;
+            this.projects[project.title] = project;
         },
         removeProject: function(project) {}
     }
