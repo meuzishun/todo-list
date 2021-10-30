@@ -1,8 +1,8 @@
 import { events } from './js/events.js';
 import { appStorage } from './js/appStorage.js';
 // import { mainContent } from './js/mainContent.js';
-import { projects } from './js/projects.js';
-import { tasks } from './js/tasks.js';
+// import { projects } from './js/projects.js';
+// import { tasks } from './js/tasks.js';
 import { markup } from './js/markup.js';
 import { navbar } from './js/navBar.js';
 import { forms } from './js/forms.js';

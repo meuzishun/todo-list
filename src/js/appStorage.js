@@ -105,7 +105,15 @@ const appStorage = {
                     tasks: {}
                 }
             },
-            userProjects: {},
+            userProjects: {
+                'test1': {
+                    title: 'test1',
+                    tasks: {
+                        title: 'Get it done',
+                        dueDate: ''
+                    }
+                }
+            },
             selectedProject: null
         //! Do not put methods in object you intend to stringify... they will not render correctly when you parse.
         };

@@ -8,91 +8,9 @@ const navbar = (function() {
     const navbar = document.querySelector('nav');
     const staticNavContainer = markup.elementBuilder('div', 'static-nav');
     const projectsNavContainer = markup.elementBuilder('div', 'projects-nav');
+    const userProjectsContainer = markup.elementBuilder('div', 'user-projects');
     markup.appendChildren([staticNavContainer, projectsNavContainer], navbar);
 
-    const handleProjectBtnClick = function(e) {
-        const projectBtn = e.target;
-        changeSelectedProject(projectBtn);
-    }
-
-    const handleAddProjectBtnClick = function(e) {
-        const btn = e.target;
-        events.emit('addProjectBtnClicked', btn);
-    }
-
-    const createProjectBtn = function(project) {
-        // const btnInfoLookup = {
-        //     'inbox': {
-        //         btnClass: 'inbox',
-        //         iconClass: 'fa-inbox',
-        //         text: 'Inbox',
-        //     },
-        //     'today': {
-        //         btnClass: 'today',
-        //         iconClass: 'fa-calendar-o',
-        //         text: 'Today',
-        //     },
-        //     'this week': {
-        //         btnClass: 'this-week',
-        //         iconClass: 'fa-calendar',
-        //         text: 'This week',
-        //     }
-        // }
-        // console.log(project);
-        const btn = markup.elementBuilder('button', `${project.title.replace(' ', '-')}`);
-
-        // const icon = markup.elementBuilder('i', ['fa', `${btnInfoLookup[name].iconClass}`]);
-
-        // const text = project.title;
-        const textNode = document.createTextNode(project.title);
-
-        markup.appendChildren([textNode], btn);
-        btn.addEventListener('click', handleProjectBtnClick);
-        // events.emit('staticProjectBtnCreated', text);
-
-        return btn;
-    }
-
-    const renderStaticNav = function() {
-        const staticProjects = appStorage.getStaticProjects();
-        //! concerned about guaranteed order here:
-        for (const project in staticProjects) {
-            // console.log(staticProjects[project]);
-            const button = createProjectBtn(staticProjects[project]);
-            staticNavContainer.appendChild(button);
-        }
-
-        // return staticNavContainer;
-    }
-
-    renderStaticNav();
-
-
-
-    const renderProjectsNav = function() {
-        const heading = markup.elementBuilder('h3', null, 'Projects');
-        const userProjects = markup.elementBuilder('div', 'user-projects');
-        const addProjBtn = markup.elementBuilder('button', 'add-project-btn');
-        const addIcon = markup.elementBuilder('i', ['fa', 'fa-plus']);
-        const addProjectText = document.createTextNode('Add Project');
-
-        markup.appendChildren([addIcon, addProjectText], addProjBtn);
-        addProjBtn.addEventListener('click', handleAddProjectBtnClick);
-        markup.appendChildren([heading, userProjects, addProjBtn], projectsNavContainer);
-        
-        // return projectsNavContainer;
-    }
-
-    renderProjectsNav();
-
-    
-
-    
-
-    
-
-
-    
     const clearSelectedBtns = function() {
         const navBtns = navbar.querySelectorAll('button');
         navBtns.forEach(btn => {
@@ -102,51 +20,83 @@ const navbar = (function() {
         });
     }
 
-    // const selectBtn = function(projectBtn) {
-        // events.emit('projectBtnClicked', projectBtn);
-    // }
+    const setSelectedProjectBtn = function() {
+        const selectedProject = appStorage.getSelectedProject();
+        const selectedProjectTitle = selectedProject.title;
+        const btns = [...navbar.querySelectorAll('button')];
+        const btnToSelect = btns.find(btn => btn.innerHTML === selectedProjectTitle);
+        btnToSelect.classList.add('selected');
+    }
 
-    const changeSelectedProject = function(btn) {
-        clearSelectedBtns();
-        btn.classList.add('selected');
-
+    const findProjectAndSetFromBtn = function(btn) {
         const project = appStorage.findProject(btn.textContent);
         appStorage.setSelectedProject(project);
     }
-    
 
-
-    // const createProjectBtn = function(project) {
-    //     const btn = document.createElement('button');
-    //     //? Should we be attaching the project to the btn like this?
-    //     btn.project = project;
-    //     btn.textContent = project.title;
-    //     btn.addEventListener('click', handleProjectBtnClick);
-    //     return btn;
-    // }
+    const changeSelectedProjectBtn = function() {
+        clearSelectedBtns();
+        setSelectedProjectBtn();
+    }
     
-    const updateUserProjectBtnList = function(projects) {
-        const userProjects = projectsNav.querySelector('.user-projects');
-        userProjects.textContent = '';
+    const handleProjectBtnClick = function(e) {
+        const projectBtn = e.target;
+        findProjectAndSetFromBtn(projectBtn);
+        changeSelectedProjectBtn();
+    }
+
+    const handleAddProjectBtnClick = function(e) {
+        const btn = e.target;
+        events.emit('addProjectBtnClicked', btn);
+    }
+
+    const createProjectBtn = function(project) {
+        const className = project.title.replace(' ', '-');
+        const btn = markup.elementBuilder('button', className);
+        const textNode = document.createTextNode(project.title);
+        btn.appendChild(textNode);
+        btn.addEventListener('click', handleProjectBtnClick);
+        return btn;
+    }
+
+    const renderStaticNav = function() {
+        const staticProjects = appStorage.getStaticProjects();
+        for (const project in staticProjects) {
+            //! concerned about guaranteed order here:
+            const button = createProjectBtn(staticProjects[project]);
+            staticNavContainer.appendChild(button);
+        }
+    }
+
+    const updateUserProjectBtnList = function() {
+        userProjectsContainer.textContent = '';
+        const projects = appStorage.getUserProjects();
         for (const key in projects) {
             const btn = createProjectBtn(projects[key]);
-            userProjects.appendChild(btn);
+            userProjectsContainer.appendChild(btn);
         }
+    }
+
+    const renderProjectsNav = function() {
+        const heading = markup.elementBuilder('h3', null, 'Projects');
+        const addProjBtn = markup.elementBuilder('button', 'add-project-btn');
+        const addIcon = markup.elementBuilder('i', ['fa', 'fa-plus']);
+        const addProjectText = document.createTextNode('Add Project');
+        addProjBtn.addEventListener('click', handleAddProjectBtnClick);
+
+        markup.appendChildren([addIcon, addProjectText], addProjBtn);
+        markup.appendChildren([heading, userProjectsContainer, addProjBtn], projectsNavContainer);
+        
+        updateUserProjectBtnList();
     }
 
     const init = function() {
         const inboxBtn = staticNavContainer.querySelector('.inbox');
-        // selectBtn(inboxBtn);
-        changeSelectedProject(inboxBtn);
+        findProjectAndSetFromBtn(inboxBtn);
+        changeSelectedProjectBtn();
     }
 
-    events.on('userProjectListUpdated', updateUserProjectBtnList);
-
-    
-    
-
-    
-
+    renderStaticNav();
+    renderProjectsNav();
     init();
 
 })();
