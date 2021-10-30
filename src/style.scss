@@ -107,6 +107,7 @@ body {
 			h2 {
 				font-size: 2rem;
 				font-weight: normal;
+				text-transform: capitalize;
 			}
 
 			.tasks-container {
@@ -152,6 +153,7 @@ body {
 	
 							.task-label {
 								font-size: 1.2rem;
+								user-select: none;
 							}
 	
 							.project-reminder {

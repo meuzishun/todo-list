@@ -2,6 +2,7 @@
 import { appStorage } from './appStorage.js';
 import { events } from './events.js';
 import { markup } from './markup.js';
+import { navbar } from './navBar.js';
 
 const forms = (function() {
     const overlay = document.querySelector('.overlay');
@@ -90,18 +91,22 @@ const forms = (function() {
         e.preventDefault();
         const form = e.target;
         const formClasses = [...form.classList];
+        //TODO: find a way to package up all the input data into an object
         const inputs = [...form.querySelectorAll('input')];
         inputs.pop();
         const data = inputs.map(input => input.value);
 
         if (formClasses.includes('new-project-form')) {
             appStorage.addUserProject(data[0]); //! obvious issue here
-            console.log(appStorage.properties);
+            navbar.updateUserProjectBtnList(); //? Should we use events module here?
             // events.emit('newProjectDataSubmitted', data);
         }
         
         if (formClasses.includes('new-task-form')) {
-            events.emit('newTaskDataSubmitted', data);
+            // events.emit('newTaskDataSubmitted', data);
+            const project = appStorage.getSelectedProject();
+            project.addTask(data);
+            console.log(project);
         } 
 
         closeForm();

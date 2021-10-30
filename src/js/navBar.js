@@ -2,6 +2,7 @@
 import { events } from "./events.js";
 import { markup } from "./markup.js";
 import { appStorage } from './appStorage.js';
+import { mainContent } from "./mainContent.js";
 
 
 const navbar = (function() {
@@ -42,6 +43,7 @@ const navbar = (function() {
         const projectBtn = e.target;
         findProjectAndSetFromBtn(projectBtn);
         changeSelectedProjectBtn();
+        mainContent.renderMainContent();
     }
 
     const handleAddProjectBtnClick = function(e) {
@@ -50,7 +52,7 @@ const navbar = (function() {
     }
 
     const createProjectBtn = function(project) {
-        const className = project.title.replace(' ', '-');
+        const className = project.title.replace(/\s/g, '-');
         const btn = markup.elementBuilder('button', className);
         const textNode = document.createTextNode(project.title);
         btn.appendChild(textNode);
@@ -98,6 +100,10 @@ const navbar = (function() {
     renderStaticNav();
     renderProjectsNav();
     init();
+
+    return {
+        updateUserProjectBtnList,
+    }
 
 })();
 

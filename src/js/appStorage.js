@@ -28,7 +28,7 @@ class Project {
     }
 }
 
-localStorage.clear();
+// localStorage.clear();
 
 const appStorage = {
     properties: {},
@@ -41,6 +41,7 @@ const appStorage = {
     addUserProject: function(title) {
         const project = new Project(title);
         this.properties.userProjects[project.title] = project;
+        this.setLocalStorage();
         return project;
     },
     findProject: function(title) {
@@ -49,12 +50,14 @@ const appStorage = {
     },
     setSelectedProject: function(project) {
         this.properties.selectedProject = project;
+        this.setLocalStorage();
     },
     getSelectedProject: function() {
         return this.properties.selectedProject;
     },
     removeUserProject: function(title) {
         delete this.properties.userProjects[title];
+        this.setLocalStorage();
     },
     setLocalStorage: function() {
         const appData = JSON.stringify(this.properties);
@@ -109,8 +112,10 @@ const appStorage = {
                 'test1': {
                     title: 'test1',
                     tasks: {
-                        title: 'Get it done',
-                        dueDate: ''
+                        'get it done': {
+                            title: 'Get it done',
+                            dueDate: ''
+                        }
                     }
                 }
             },
