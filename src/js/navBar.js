@@ -6,6 +6,19 @@ import { appStorage } from './appStorage.js';
 
 const navbar = (function() {
     const navbar = document.querySelector('nav');
+    const staticNavContainer = markup.elementBuilder('div', 'static-nav');
+    const projectsNavContainer = markup.elementBuilder('div', 'projects-nav');
+    markup.appendChildren([staticNavContainer, projectsNavContainer], navbar);
+
+    const handleProjectBtnClick = function(e) {
+        const projectBtn = e.target;
+        changeSelectedProject(projectBtn);
+    }
+
+    const handleAddProjectBtnClick = function(e) {
+        const btn = e.target;
+        events.emit('addProjectBtnClicked', btn);
+    }
 
     const createProjectBtn = function(project) {
         // const btnInfoLookup = {
@@ -41,8 +54,6 @@ const navbar = (function() {
     }
 
     const renderStaticNav = function() {
-        const staticNavContainer = markup.elementBuilder('div', 'static-nav');
-
         const staticProjects = appStorage.getStaticProjects();
         //! concerned about guaranteed order here:
         for (const project in staticProjects) {
@@ -51,12 +62,14 @@ const navbar = (function() {
             staticNavContainer.appendChild(button);
         }
 
-        return staticNavContainer;
+        // return staticNavContainer;
     }
 
-    const createProjectsNav = function() {
-        const projectsNavContainer = markup.elementBuilder('div', 'projects-nav');
+    renderStaticNav();
 
+
+
+    const renderProjectsNav = function() {
         const heading = markup.elementBuilder('h3', null, 'Projects');
         const userProjects = markup.elementBuilder('div', 'user-projects');
         const addProjBtn = markup.elementBuilder('button', 'add-project-btn');
@@ -67,13 +80,18 @@ const navbar = (function() {
         addProjBtn.addEventListener('click', handleAddProjectBtnClick);
         markup.appendChildren([heading, userProjects, addProjBtn], projectsNavContainer);
         
-        return projectsNavContainer;
+        // return projectsNavContainer;
     }
 
-    const handleAddProjectBtnClick = function(e) {
-        const btn = e.target;
-        events.emit('addProjectBtnClicked', btn);
-    }
+    renderProjectsNav();
+
+    
+
+    
+
+    
+
+
     
     const clearSelectedBtns = function() {
         const navBtns = navbar.querySelectorAll('button');
@@ -96,10 +114,7 @@ const navbar = (function() {
         appStorage.setSelectedProject(project);
     }
     
-    const handleProjectBtnClick = function(e) {
-        const projectBtn = e.target;
-        changeSelectedProject(projectBtn);
-    }
+
 
     // const createProjectBtn = function(project) {
     //     const btn = document.createElement('button');
@@ -120,17 +135,17 @@ const navbar = (function() {
     }
 
     const init = function() {
-        const inboxBtn = staticNav.querySelector('.inbox');
+        const inboxBtn = staticNavContainer.querySelector('.inbox');
         // selectBtn(inboxBtn);
         changeSelectedProject(inboxBtn);
     }
 
     events.on('userProjectListUpdated', updateUserProjectBtnList);
 
-    const staticNav = renderStaticNav();
-    const projectsNav = createProjectsNav();
+    
+    
 
-    markup.appendChildren([staticNav, projectsNav], navbar);
+    
 
     init();
 
