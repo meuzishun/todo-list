@@ -1,4 +1,5 @@
 
+import { appStorage } from './appStorage.js';
 import { events } from './events.js';
 import { markup } from './markup.js';
 
@@ -94,7 +95,9 @@ const forms = (function() {
         const data = inputs.map(input => input.value);
 
         if (formClasses.includes('new-project-form')) {
-            events.emit('newProjectDataSubmitted', data);
+            appStorage.addUserProject(data[0]); //! obvious issue here
+            console.log(appStorage.properties);
+            // events.emit('newProjectDataSubmitted', data);
         }
         
         if (formClasses.includes('new-task-form')) {
