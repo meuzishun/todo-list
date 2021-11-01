@@ -1,6 +1,7 @@
 
-import { appStorage } from './appStorage.js';
 import { events } from './events.js';
+import { appStorage } from './appStorage.js';
+import { mainContent } from './mainContent.js';
 import { markup } from './markup.js';
 import { navbar } from './navBar.js';
 
@@ -29,6 +30,7 @@ const forms = (function() {
         const form = document.createElement('form');
         
         const titleOrNameInput = document.createElement('input');
+        titleOrNameInput.id = 'title';
         titleOrNameInput.setAttribute('type', 'text');
         titleOrNameInput.required = true;
         form.appendChild(titleOrNameInput);
@@ -56,6 +58,7 @@ const forms = (function() {
 
             const description = document.createElement('input');
             description.setAttribute('type', 'text');
+            description.id = 'description';
             description.placeholder = 'Description';
             form.appendChild(description);
 
@@ -68,7 +71,7 @@ const forms = (function() {
 
             const dateInput = document.createElement('input');
             dateInput.setAttribute('type', 'date');
-            dateInput.id = 'due-date';
+            dateInput.id = 'dueDate';
             dateInput.placeholder = 'Due Date';
 
             dueDateContainer.appendChild(dueDateLabel);
@@ -84,32 +87,43 @@ const forms = (function() {
         titleOrNameInput.focus();
     }
     
-    events.on('addProjectBtnClicked', openForm);
-    events.on('addTaskBtnClicked', openForm);
+    // events.on('addProjectBtnClicked', openForm);
+    // events.on('addTaskBtnClicked', openForm);
     
     const submitForm = function(e) {
         e.preventDefault();
         const form = e.target;
         const formClasses = [...form.classList];
-        //TODO: find a way to package up all the input data into an object
         const inputs = [...form.querySelectorAll('input')];
-        inputs.pop();
-        const data = inputs.map(input => input.value);
+        const data = {};
+        inputs.forEach(input => {
+            if (input.type !== 'submit') {
+                if (input.id === 'dueDate') {
+                    const inputDate = input.value.split('-');
+                    inputDate[1] = `${inputDate[1] - 1}`;
+                    data.dueDate = new Date(...inputDate);
+                } else {
+                    data[input.id] = input.value;
+                }
+            }
+        });
 
         if (formClasses.includes('new-project-form')) {
-            appStorage.addUserProject(data[0]); //! obvious issue here
+            appStorage.addUserProject(data.title);
             navbar.updateUserProjectBtnList(); //? Should we use events module here?
-            // events.emit('newProjectDataSubmitted', data);
         }
         
         if (formClasses.includes('new-task-form')) {
-            // events.emit('newTaskDataSubmitted', data);
             const project = appStorage.getSelectedProject();
             project.addTask(data);
-            console.log(project);
+            mainContent.renderMainContent();
         } 
 
         closeForm();
+    }
+
+    return {
+        openForm
     }
 })();
 

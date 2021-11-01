@@ -1,8 +1,9 @@
 
-import { events } from "./events.js";
+// import { events } from "./events.js";
 import { markup } from "./markup.js";
 import { appStorage } from './appStorage.js';
 import { mainContent } from "./mainContent.js";
+import { forms } from "./forms.js";
 
 
 const navbar = (function() {
@@ -48,7 +49,8 @@ const navbar = (function() {
 
     const handleAddProjectBtnClick = function(e) {
         const btn = e.target;
-        events.emit('addProjectBtnClicked', btn);
+        // events.emit('addProjectBtnClicked', btn);
+        forms.openForm(btn);
     }
 
     const createProjectBtn = function(project) {

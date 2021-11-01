@@ -1,14 +1,16 @@
 
-import { events } from './events.js';
+// import { events } from './events.js';
 import { markup } from './markup.js';
 import { appStorage } from './appStorage.js';
+import { forms } from './forms.js';
 
 const mainContent = (function() {
     const mainContent = document.querySelector('main');
 
     const handleAddTaskBtnClick = function(e) {
         const btn = e.target;
-        events.emit('addTaskBtnClicked', btn);
+        // events.emit('addTaskBtnClicked', btn);
+        forms.openForm(btn);
     }
 
     const toggleDescriptionDisplay = function(e) {
@@ -101,8 +103,10 @@ const mainContent = (function() {
 
     }
 
-    events.on('currentProjectSet', renderMainContent);
-    events.on('currentProjectTasksUpdated', renderMainContent);
+    // events.on('currentProjectSet', renderMainContent);
+    // events.on('currentProjectTasksUpdated', renderMainContent);
+
+    renderMainContent();
 
     return {
         renderMainContent,
