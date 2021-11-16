@@ -1,4 +1,4 @@
-// import { events } from './events.js';
+
 import {appStorage} from './appStorage.js';
 import {navbar} from './navBar.js';
 import {forms} from './forms.js';

@@ -1,3 +1,4 @@
+
 import {appStorage} from './appStorage.js';
 import {mainContent} from './mainContent.js';
 import {markup} from './markup.js';
@@ -146,10 +147,6 @@ const forms = (function() {
 		form.appendChild(dueDateContainer);
 		form.appendChild(projectInput);
 		form.addEventListener('submit', submitForm);
-		// form.addEventListener('submit', (e) => {
-		//     selectedProject.removeTask(task.uuid);
-		//     submitForm(e);
-		// });
 		form.appendChild(submitBtn);
 		form.appendChild(delBtn);
 
@@ -159,7 +156,6 @@ const forms = (function() {
 
 		overlay.appendChild(formContainer);
 		overlay.classList.toggle('hidden');
-		// titleOrNameInput.focus();
 	};
 
 	const openForm = function(btn) {
@@ -307,9 +303,6 @@ const forms = (function() {
             newProject.createTask(data);
             oldProject.removeTask(form.dataset.oldTask_uuid);
 			// console.log(data);
-			// task.title = data.title;
-			// task.description = data.description;
-			// task.dueDate = data.dueDate;
 			mainContent.renderMainContent();
 		}
 

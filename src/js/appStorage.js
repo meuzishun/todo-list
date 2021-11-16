@@ -1,3 +1,4 @@
+
 import {v4 as uuidv4} from 'https://jspm.dev/uuid';
 
 class Task {
@@ -114,7 +115,7 @@ const appStorage = {
 		const projects = this.getAllProjects();
 		const allTasks = [];
 		projects.forEach(function(project) {
-			console.log(project);
+			// console.log(project);
 			const tasks = project.getTasks();
 			for (const task in tasks) {
 				allTasks.push(tasks[task]);
@@ -163,7 +164,7 @@ const appStorage = {
 		return this.properties;
 	},
 	setProperties          : function(props) {
-		console.log(props);
+		// console.log(props);
 		//TODO: use props to recreate actual project objects so that they have the methods we need
 		this.properties = props;
 		this.setLocalStorage();
@@ -195,7 +196,7 @@ const appStorage = {
 		const inbox = this.addStaticProject('inbox');
 		const today = this.addStaticProject('today');
 		const thisWeek = this.addStaticProject('this week');
-		console.log(this.properties);
+		// console.log(this.properties);
 		inbox.createTask(
 			new Task({
 				title       : 'Test task 1',
