@@ -1,4 +1,7 @@
-import { events } from './js/events.js';
+// import { events } from './js/events.js';
+//? How do you import this?
+// import {v4 as uuidv4} from '../node_modules/uuid/dist/v4.js';
+// import { v4 as uuidv4 } from './js/uuid';
 import { appStorage } from './js/appStorage.js';
 // import { projects } from './js/projects.js';
 // import { tasks } from './js/tasks.js';

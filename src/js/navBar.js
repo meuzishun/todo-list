@@ -1,10 +1,8 @@
 
-// import { events } from "./events.js";
 import { markup } from "./markup.js";
 import { appStorage } from './appStorage.js';
 import { mainContent } from "./mainContent.js";
 import { forms } from "./forms.js";
-
 
 const navbar = (function() {
     const navbar = document.querySelector('nav');
@@ -31,7 +29,7 @@ const navbar = (function() {
     }
 
     const findProjectAndSetFromBtn = function(btn) {
-        const project = appStorage.findProject(btn.textContent);
+        const project = appStorage.findProject(btn.dataset.uuid);
         appStorage.setSelectedProject(project);
     }
 
@@ -51,11 +49,13 @@ const navbar = (function() {
         const btn = e.target;
         // events.emit('addProjectBtnClicked', btn);
         forms.openForm(btn);
+        // forms.openNewProjectForm();
     }
 
     const createProjectBtn = function(project) {
         const className = project.title.replace(/\s/g, '-');
         const btn = markup.elementBuilder('button', className);
+        btn.setAttribute('data-uuid', project.uuid);
         const textNode = document.createTextNode(project.title);
         btn.appendChild(textNode);
         btn.addEventListener('click', handleProjectBtnClick);
@@ -105,6 +105,7 @@ const navbar = (function() {
 
     return {
         updateUserProjectBtnList,
+        handleProjectBtnClick
     }
 
 })();
