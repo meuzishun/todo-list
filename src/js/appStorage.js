@@ -1,18 +1,20 @@
-
 import {v4 as uuidv4} from 'https://jspm.dev/uuid';
 
 class Task {
 	constructor(data) {
-		this.uuid = uuidv4();
+		const { uuid = uuidv4(), completed = false } = data;
+		this.uuid = uuid;
 		this.title = data.title;
 		this.description = data.description || null;
-		this.dueDate = data.dueDate || null;
-		this.completed = false;
+		this.dueDate = (typeof data.dueDate === 'string') ? new Date(data.dueDate) : data.dueDate || null;
+		this.project_uuid = data.project_uuid;
+		this.completed = completed;
 	}
 }
 
 class Project {
-	constructor(title, uuid = uuidv4(), tasks = []) {
+	constructor(data) {
+		const { title, uuid = uuidv4(), tasks = [] } = data;
 		this.uuid = uuid;
 		this.title = title;
 		this.tasks = tasks;
@@ -24,36 +26,32 @@ class Project {
 		const task = new Task(data);
 		task.project_uuid = this.uuid;
 		this.addTask(task);
-		// console.log(task);
 		return task;
 	}
 	addTask(task) {
-		// this.tasks[task.title] = task;
 		this.tasks.push(task);
 	}
 	findTask(uuid) {
 		return this.tasks.find(function(task) {
 			return task.uuid === uuid;
 		});
-		// return this.tasks.
 	}
 	removeTask(uuid) {
-		// delete this.findTask(uuid);
 		this.tasks = this.tasks.filter((task) => task.uuid !== uuid);
 	}
 }
 
-localStorage.clear();
+// localStorage.clear();
 
 const appStorage = {
 	properties             : {},
 	setToday               : function() {
-		const today = new Date();
-		today.setHours(0, 0, 0, 0);
-		this.properties.today = today;
+		const todaysDate = new Date();
+		todaysDate.setHours(0, 0, 0, 0);
+		this.properties.todaysDate = todaysDate;
 	},
 	getToday               : function() {
-		return this.properties.today;
+		return this.properties.todaysDate;
 	},
 	setEndOfWeek           : function() {
 		const endOfWeek = new Date();
@@ -76,8 +74,8 @@ const appStorage = {
 		this.setLocalStorage();
 		return project;
 	},
-	addUserProject         : function(title) {
-		const project = new Project(title);
+	addUserProject         : function(data) {
+		const project = new Project(data);
 		this.properties.userProjects[project.title] = project;
 		this.setLocalStorage();
 		return project;
@@ -115,7 +113,6 @@ const appStorage = {
 		const projects = this.getAllProjects();
 		const allTasks = [];
 		projects.forEach(function(project) {
-			// console.log(project);
 			const tasks = project.getTasks();
 			for (const task in tasks) {
 				allTasks.push(tasks[task]);
@@ -148,7 +145,9 @@ const appStorage = {
 		const today = this.getToday();
 		tasks.forEach(function(task) {
 			if (task.dueDate < today && task.completed) {
+				console.log(`task ${task.title} is completed`);
 				const project = appStorage.findProject(task.project_uuid);
+				console.log(project);
 				console.log(`Deleting task ${task.uuid}`);
 				project.removeTask(task.uuid);
 			}
@@ -164,8 +163,29 @@ const appStorage = {
 		return this.properties;
 	},
 	setProperties          : function(props) {
-		// console.log(props);
-		//TODO: use props to recreate actual project objects so that they have the methods we need
+		console.log('Found in storage... parsing');
+		for (const project in props.staticProjects) {
+			const data = props.staticProjects[project];
+			delete props.staticProjects[project];
+			props.staticProjects[project] = new Project(data);
+			if (props.staticProjects[project].title === 'inbox') {
+				props.selectedProject = props.staticProjects[project];
+			}
+			for (const task in props.staticProjects[project].tasks) {
+				const data = props.staticProjects[project].tasks[task];
+				props.staticProjects[project].tasks[task] = new Task(data);
+			}
+		}
+		for (const project in props.userProjects) {
+			const data = props.userProjects[project];
+			delete props.userProjects[project];
+			props.userProjects[project] = new Project(data);
+			for (const task in props.userProjects[project].tasks) {
+				const data = props.userProjects[project].tasks[task];
+				props.userProjects[project].tasks[task] = new Task(data);
+			}
+		}
+
 		this.properties = props;
 		this.setLocalStorage();
 	},
@@ -184,54 +204,57 @@ const appStorage = {
 			this.setProperties(propsObj);
 			this.setToday();
 			this.setEndOfWeek();
+			this.clearCompletedOldTasks();
+			this.setLocalStorage();
 		}
 	},
 	reset                  : function() {
+		console.log('Could not find storage... resetting');
 		this.properties = {
 			staticProjects  : {},
 			userProjects    : {},
 			selectedProject : null
 			//! Do not put methods in object you intend to stringify... they will not render correctly when you parse.
 		};
-		const inbox = this.addStaticProject('inbox');
-		const today = this.addStaticProject('today');
-		const thisWeek = this.addStaticProject('this week');
+		const inbox = this.addStaticProject({title: 'inbox'});
+		const today = this.addStaticProject({title: 'today'});
+		const thisWeek = this.addStaticProject({title: 'this week'});
 		// console.log(this.properties);
-		inbox.createTask(
-			new Task({
-				title       : 'Test task 1',
-				description : 'this is the description',
-				dueDate     : (() => {
-					const date = new Date('2021', '10', '16');
-					date.setHours(0, 0, 0, 0);
-					return date;
-				})()
-			})
-		);
-		const done = inbox.createTask(
-			new Task({
-				title       : 'Test task 2',
-				description : 'this is the description',
-				dueDate     : (() => {
-					const date = new Date('2021', '10', '15');
-					date.setHours(0, 0, 0, 0);
-					return date;
-				})()
-			})
-		);
-		done.completed = true;
-		const doneAndOld = inbox.createTask(
-			new Task({
-				title       : 'Test task 3',
-				description : 'this is the description',
-				dueDate     : (() => {
-					const date = new Date('2021', '10', '12');
-					date.setHours(0, 0, 0, 0);
-					return date;
-				})()
-			})
-		);
-		doneAndOld.completed = false;
+		// inbox.createTask(
+		// 	new Task({
+		// 		title       : 'Test task 1',
+		// 		description : 'this is the description',
+		// 		dueDate     : (() => {
+		// 			const date = new Date('2021', '10', '16');
+		// 			date.setHours(0, 0, 0, 0);
+		// 			return date;
+		// 		})()
+		// 	})
+		// );
+		// const done = inbox.createTask(
+		// 	new Task({
+		// 		title       : 'Test task 2',
+		// 		description : 'this is the description',
+		// 		dueDate     : (() => {
+		// 			const date = new Date('2021', '10', '15');
+		// 			date.setHours(0, 0, 0, 0);
+		// 			return date;
+		// 		})()
+		// 	})
+		// );
+		// done.completed = true;
+		// const doneAndOld = inbox.createTask(
+		// 	new Task({
+		// 		title       : 'Test task 3',
+		// 		description : 'this is the description',
+		// 		dueDate     : (() => {
+		// 			const date = new Date('2021', '10', '12');
+		// 			date.setHours(0, 0, 0, 0);
+		// 			return date;
+		// 		})()
+		// 	})
+		// );
+		// doneAndOld.completed = false;
 		this.setSelectedProject(inbox);
 		this.setToday();
 		this.setEndOfWeek();
@@ -242,5 +265,4 @@ const appStorage = {
 
 appStorage.getLocalStorage();
 
-// export {appStorage, Project};
 export {appStorage};

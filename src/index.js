@@ -14,24 +14,5 @@ import { mainContent } from './js/mainContent.js';
 function logData(data) {
     console.log(data);
 }
-// console.table(appStorage);
 
-// appStorage.getLocalStorage();
-
-// setTimeout(() => { console.table(appStorage) }, 10000);
-
-// setTimeout(console.table(appStorage.getProjects()), 2000);
-
-// console.table(appStorage.getProperties());
-
-
-// const testElement1 = markup.elementBuilder('h1', 'test-heading');
-// const testElement2 = markup.elementBuilder('p', ['test-para', 'text']);
-// const testContainer = markup.elementBuilder('div', 'test-container');
-// markup.appendChildren([testElement1, testElement2], testContainer);
-// console.log(testContainer);
-
-// events.emit('newProjectCreated', inbox);
-
-// events.printEvents();
 

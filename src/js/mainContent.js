@@ -1,4 +1,3 @@
-
 import {appStorage} from './appStorage.js';
 import {navbar} from './navBar.js';
 import {forms} from './forms.js';
@@ -41,7 +40,6 @@ const mainContent = (function() {
 		markup.appendChildren([projectHeading, tasksContainer], projectContainer);
 
 		const getProjectTasks = function(project) {
-			console.log(project);
 			if (project.title === 'today') {
 				const todaysTasks = appStorage.getTodaysTasks();
 				return todaysTasks;
@@ -53,9 +51,6 @@ const mainContent = (function() {
 			if (project.title !== 'today' && project.title !== 'this week') {
 				const tasks = project.getTasks();
 				return tasks;
-				//! This was added but doesn't work
-				// const tasks = new Project(project);
-				// return tasks.getTasks();
 			}
 		};
 
@@ -85,42 +80,32 @@ const mainContent = (function() {
 			const taskLabel = markup.elementBuilder('label', 'task-label', currentTask.title);
 			taskLabel.setAttribute('for', `${taskTitle}-checkbox`);
 			markup.appendChildren([taskCheckbox, taskLabel], taskHeaderLeftSide);
+
 			
-
-			taskCheckbox.addEventListener('click', () => {
-				// if (taskCheckbox.checked) currentTask.completed = true;
-				// if (!taskCheckbox.checked) currentTask.completed = false;
-				// console.log(currentTask);
-				setTaskCompleted();
-			});
-
 			const checkComplete = function() {
 				return currentTask.completed;
-			}
-
+			};
+			
 			const addStrikeThrough = function() {
 				if (!taskLabel.classList.contains('checked')) {
 					taskLabel.classList.add('checked');
 					taskContainer.classList.add('checked');
 				}
-			}
+			};
 			
 			const removeStrikeThrough = function() {
 				if (taskLabel.classList.contains('checked')) {
 					taskLabel.classList.remove('checked');
 					taskContainer.classList.remove('checked');
 				}
-			}
-		
-
+			};
+			
 			const setTaskCompleted = function() {
 				//TODO: set as completed without checking checkbox
-				// if (!currentTask.completed) {
-				// 	currentTask.completed = true;
-				// }
 				if (taskCheckbox.checked) currentTask.completed = true;
 				if (!taskCheckbox.checked) currentTask.completed = false;
-				console.log(checkComplete());
+				appStorage.setLocalStorage();
+				
 				if (checkComplete()) {
 					addStrikeThrough();
 				}
@@ -128,13 +113,13 @@ const mainContent = (function() {
 					removeStrikeThrough();
 				}
 			};
-
+			
 			if (checkComplete()) {
 				addStrikeThrough();
 				taskCheckbox.checked = true;
 			}
-
 			
+			taskCheckbox.addEventListener('click', setTaskCompleted);
 			// if (currentTask.description) {
 			//     const descriptionBtn = markup.elementBuilder('button', 'description-btn', 'Show Description');
 			//     descriptionBtn.addEventListener('click', toggleDescriptionDisplay);
@@ -150,9 +135,7 @@ const mainContent = (function() {
 				if (project.title !== 'today') {
 					const today = appStorage.getToday();
 					const todayDay = today.getDay();
-					// console.log(`Today's day is num ${todayDay}`);
 					const dueDateDay = currentTask.dueDate.getDay();
-					// console.log(`The task ${currentTask.title}'s day is num ${dueDateDay}`);
 					const dueDate_msID = currentTask.dueDate.valueOf();
 					const dueDateYear = currentTask.dueDate.getFullYear();
 					const today_msID = today.valueOf();
@@ -226,8 +209,6 @@ const mainContent = (function() {
 				projectReminder.dataset.uuid = currentTask.project_uuid;
 				projectReminder.addEventListener('click', navbar.handleProjectBtnClick);
 				taskHeaderRightSide.appendChild(projectReminder);
-				// const allTasks = appStorage.getAllTasks();
-				// console.log(allTasks);
 			}
 
 			tasksContainer.appendChild(taskContainer);

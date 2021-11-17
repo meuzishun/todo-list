@@ -1,4 +1,3 @@
-
 import {appStorage} from './appStorage.js';
 import {mainContent} from './mainContent.js';
 import {markup} from './markup.js';
@@ -19,47 +18,7 @@ const forms = (function() {
 		overlay.classList.add('hidden');
 	};
 
-	// const openNewProjectForm = function() {
-	//     const formContainer = markup.elementBuilder('div', 'form-container');
-	//     formContainer.classList.add('new-project-form-container');
-
-	//     const closeBtn = markup.elementBuilder('p', 'form-close-btn');
-	//     const removeIcon = markup.elementBuilder('i', ['fa', 'fa-remove']);
-	//     closeBtn.appendChild(removeIcon);
-	//     closeBtn.addEventListener('click', closeForm);
-	//     document.addEventListener('keydown', escape);
-
-	//     const heading = document.createElement('h2');
-	//     heading.textContent = 'Add New Project';
-
-	//     const form = document.createElement('form');
-	//     form.classList.add('new-project-form');
-
-	//     const titleInput = document.createElement('input');
-	//     titleInput.id = 'title';
-	//     titleInput.setAttribute('type', 'text');
-	//     titleInput.required = true;
-	//     titleInput.placeholder = "Project Name";
-	//     form.appendChild(titleInput);
-
-	//     const submitBtn = document.createElement('input');
-	//     submitBtn.setAttribute('type', 'submit');
-	//     submitBtn.value = "Add Project";
-	//     form.addEventListener('submit', submitForm);
-	//     form.appendChild(submitBtn);
-
-	//     formContainer.appendChild(closeBtn);
-	//     formContainer.appendChild(heading);
-	//     formContainer.appendChild(form);
-
-	//     overlay.appendChild(formContainer);
-	//     overlay.classList.toggle('hidden');
-	//     titleInput.focus();
-	// }
-
-	// const openNewTaskForm = function() {}
 	const openEditTaskForm = function(task) {
-		// console.log(task);
 		const formContainer = markup.elementBuilder('div', 'form-container');
 		formContainer.classList.add('new-task-form-container');
 
@@ -80,13 +39,11 @@ const forms = (function() {
 		titleOrNameInput.id = 'title';
 		titleOrNameInput.setAttribute('type', 'text');
 		titleOrNameInput.required = true;
-		// titleOrNameInput.placeholder = 'Title';
 		titleOrNameInput.value = task.title;
 
 		const description = document.createElement('input');
 		description.setAttribute('type', 'text');
 		description.id = 'description';
-		// description.placeholder = 'Description';
 		description.value = task.description;
 
 		const dueDateContainer = document.createElement('div');
@@ -100,7 +57,6 @@ const forms = (function() {
 		const dateInput = document.createElement('input');
 		dateInput.setAttribute('type', 'date');
 		dateInput.id = 'dueDate';
-		// dateInput.placeholder = 'Due Date';
 		dateInput.value = `${task.dueDate.getFullYear()}-${task.dueDate.getMonth() + 1}-${task.dueDate.getDate()}`;
 		dueDateContainer.appendChild(dateInput);
 
@@ -110,9 +66,9 @@ const forms = (function() {
 		const filteredProjects = projects.filter(function(project) {
 			return project.title !== 'today' && project.title !== 'this week';
 		});
-		// const oldProject = appStorage.getSelectedProject();
+
 		const oldProject = appStorage.findProject(task.project_uuid);
-        form.dataset.oldProject_uuid = oldProject.uuid;
+		form.dataset.oldProject_uuid = oldProject.uuid;
 		filteredProjects.forEach(function(project) {
 			const option = document.createElement('option');
 			option.classList.add('project-option');
@@ -256,7 +212,7 @@ const forms = (function() {
 		e.preventDefault();
 		if (e.submitter.classList.contains('del-btn')) {
 			return;
-		};
+		}
 		const form = e.target;
 		const formClasses = [...form.classList];
 		const inputs = [...form.querySelectorAll('input')];
@@ -274,7 +230,8 @@ const forms = (function() {
 		});
 
 		if (formClasses.includes('new-project-form')) {
-			appStorage.addUserProject(data.title);
+			console.log(data);
+			appStorage.addUserProject(data);
 			navbar.updateUserProjectBtnList();
 		}
 
@@ -284,25 +241,21 @@ const forms = (function() {
 				return option.selected;
 			})[0].dataset.uuid;
 			const project = appStorage.findProject(project_uuid);
-			// console.log(data);
 			project.createTask(data);
 			mainContent.renderMainContent();
 		}
 
 		if (formClasses.includes('edit-task-form')) {
-            const oldProject = appStorage.findProject(form.dataset.oldProject_uuid);
-            // console.log(oldProject);
-            const oldTask = oldProject.findTask(form.dataset.oldTask_uuid);
-            // console.log(oldTask);
+			const oldProject = appStorage.findProject(form.dataset.oldProject_uuid);
+			const oldTask = oldProject.findTask(form.dataset.oldTask_uuid);
 
 			const projectOptions = [...form.querySelectorAll('option')];
 			const newProject_uuid = projectOptions.filter(function(option) {
 				return option.selected;
 			})[0].dataset.uuid;
-            const newProject = appStorage.findProject(newProject_uuid);
-            newProject.createTask(data);
-            oldProject.removeTask(form.dataset.oldTask_uuid);
-			// console.log(data);
+			const newProject = appStorage.findProject(newProject_uuid);
+			newProject.createTask(data);
+			oldProject.removeTask(form.dataset.oldTask_uuid);
 			mainContent.renderMainContent();
 		}
 
@@ -311,7 +264,6 @@ const forms = (function() {
 
 	return {
 		openForm,
-		// openNewProjectForm,
 		openEditTaskForm
 	};
 })();
