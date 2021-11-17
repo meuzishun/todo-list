@@ -7,12 +7,4 @@ import { mainContent } from './js/mainContent.js';
 // import './css/style.min.css';
 // import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css';
 
-// events.printEvents();
-
 // localStorage.clear();
-
-function logData(data) {
-    console.log(data);
-}
-
-
