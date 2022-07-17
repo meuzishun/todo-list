@@ -1275,235 +1275,271 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const mainContent = (function() {
-	const mainContent = document.querySelector('main');
+const mainContent = (function () {
+  const mainContent = document.querySelector('main');
 
-	const handleAddTaskBtnClick = function(e) {
-		const btn = e.target;
-		_forms_js__WEBPACK_IMPORTED_MODULE_2__.forms.openForm(btn);
-	};
+  const handleAddTaskBtnClick = function (e) {
+    const btn = e.target;
+    _forms_js__WEBPACK_IMPORTED_MODULE_2__.forms.openForm(btn);
+  };
 
-	const toggleDescriptionDisplay = function(e) {
-		const descriptionBtn = e.target;
-		const centerContainer = descriptionBtn.parentElement;
-		const taskHeader = centerContainer.parentElement;
-		const taskContainer = taskHeader.parentElement;
-		const descriptionContainer = taskContainer.querySelector('.description-container');
-		descriptionContainer.classList.toggle('hidden');
-		descriptionBtn.textContent = descriptionContainer.classList.contains('hidden')
-			? 'Show Description'
-			: 'Hide Description';
-	};
+  const toggleDescriptionDisplay = function (e) {
+    const descriptionBtn = e.target;
+    const centerContainer = descriptionBtn.parentElement;
+    const taskHeader = centerContainer.parentElement;
+    const taskContainer = taskHeader.parentElement;
+    const descriptionContainer = taskContainer.querySelector(
+      '.description-container'
+    );
+    descriptionContainer.classList.toggle('hidden');
+    descriptionBtn.textContent = descriptionContainer.classList.contains(
+      'hidden'
+    )
+      ? 'Show Description'
+      : 'Hide Description';
+  };
 
-	const renderMainContent = function() {
-		const project = _appStorage_js__WEBPACK_IMPORTED_MODULE_0__.appStorage.getSelectedProject();
+  const renderMainContent = function () {
+    const project = _appStorage_js__WEBPACK_IMPORTED_MODULE_0__.appStorage.getSelectedProject();
 
-		mainContent.textContent = '';
+    mainContent.textContent = '';
 
-		const projectTitleAsClassName = project.title.replace(/\s/g, '-');
-		const projectContainer = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder('div', [
-			`${projectTitleAsClassName}-container`,
-			'project-container'
-		]);
+    const projectTitleAsClassName = project.title.replace(/\s/g, '-');
+    const projectContainer = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder('div', [
+      `${projectTitleAsClassName}-container`,
+      'project-container',
+    ]);
 
-		const projectHeading = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder('h2', null, project.title);
-		const tasksContainer = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder('div', 'tasks-container');
+    const projectHeading = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder('h2', null, project.title);
+    const tasksContainer = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder('div', 'tasks-container');
 
-		_markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.appendChildren([projectHeading, tasksContainer], projectContainer);
+    _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.appendChildren([projectHeading, tasksContainer], projectContainer);
 
-		const getProjectTasks = function(project) {
-			if (project.title === 'today') {
-				const todaysTasks = _appStorage_js__WEBPACK_IMPORTED_MODULE_0__.appStorage.getTodaysTasks();
-				return todaysTasks;
-			}
-			if (project.title === 'this week') {
-				const thisWeeksTasks = _appStorage_js__WEBPACK_IMPORTED_MODULE_0__.appStorage.getThisWeeksTasks();
-				return thisWeeksTasks;
-			}
-			if (project.title !== 'today' && project.title !== 'this week') {
-				const tasks = project.getTasks();
-				return tasks;
-			}
-		};
+    const getProjectTasks = function (project) {
+      if (project.title === 'today') {
+        const todaysTasks = _appStorage_js__WEBPACK_IMPORTED_MODULE_0__.appStorage.getTodaysTasks();
+        return todaysTasks;
+      }
+      if (project.title === 'this week') {
+        const thisWeeksTasks = _appStorage_js__WEBPACK_IMPORTED_MODULE_0__.appStorage.getThisWeeksTasks();
+        return thisWeeksTasks;
+      }
+      if (project.title !== 'today' && project.title !== 'this week') {
+        const tasks = project.getTasks();
+        return tasks;
+      }
+    };
 
-		const tasks = getProjectTasks(project);
+    const tasks = getProjectTasks(project);
 
-		for (const task in tasks) {
-			const currentTask = tasks[task];
-			const taskTitle = currentTask.title.replace(/\s/g, '-') || currentTask.title;
+    for (const task in tasks) {
+      const currentTask = tasks[task];
+      const taskTitle =
+        currentTask.title.replace(/\s/g, '-') || currentTask.title;
 
-			const taskContainer = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder('div', 'single-task-container');
+      const taskContainer = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder(
+        'div',
+        'single-task-container'
+      );
 
-			const taskHeader = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder('div', 'task-header');
-			taskContainer.appendChild(taskHeader);
+      const taskHeader = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder('div', 'task-header');
+      taskContainer.appendChild(taskHeader);
 
-			const taskHeaderLeftSide = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder('div', 'task-header-left-side');
-			// const taskHeaderCenter = markup.elementBuilder('div', 'task-header-center');
-			const taskHeaderRightSide = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder('div', 'task-header-right-side');
-			_markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.appendChildren([taskHeaderLeftSide, taskHeaderRightSide], taskHeader);
+      const taskHeaderLeftSide = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder(
+        'div',
+        'task-header-left-side'
+      );
+      // const taskHeaderCenter = markup.elementBuilder('div', 'task-header-center');
+      const taskHeaderRightSide = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder(
+        'div',
+        'task-header-right-side'
+      );
+      _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.appendChildren(
+        [taskHeaderLeftSide, taskHeaderRightSide],
+        taskHeader
+      );
 
-			// const descriptionContainer = markup.elementBuilder('div', ['description-container', 'hidden']);
-			// markup.appendChildren([taskHeader, descriptionContainer], taskContainer);
+      // const descriptionContainer = markup.elementBuilder('div', ['description-container', 'hidden']);
+      // markup.appendChildren([taskHeader, descriptionContainer], taskContainer);
 
-			const taskCheckbox = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder('input', 'task-checkbox');
-			taskCheckbox.setAttribute('type', 'checkbox');
-			taskCheckbox.id = `${taskTitle}-checkbox`;
+      const taskCheckbox = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder('input', 'task-checkbox');
+      taskCheckbox.setAttribute('type', 'checkbox');
+      taskCheckbox.id = `${taskTitle}-checkbox`;
 
-			const taskLabel = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder('label', 'task-label', currentTask.title);
-			taskLabel.setAttribute('for', `${taskTitle}-checkbox`);
-			_markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.appendChildren([taskCheckbox, taskLabel], taskHeaderLeftSide);
+      const taskLabel = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder(
+        'label',
+        'task-label',
+        currentTask.title
+      );
+      taskLabel.setAttribute('for', `${taskTitle}-checkbox`);
+      _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.appendChildren([taskCheckbox, taskLabel], taskHeaderLeftSide);
 
-			
-			const checkComplete = function() {
-				return currentTask.completed;
-			};
-			
-			const addStrikeThrough = function() {
-				if (!taskLabel.classList.contains('checked')) {
-					taskLabel.classList.add('checked');
-					taskContainer.classList.add('checked');
-				}
-			};
-			
-			const removeStrikeThrough = function() {
-				if (taskLabel.classList.contains('checked')) {
-					taskLabel.classList.remove('checked');
-					taskContainer.classList.remove('checked');
-				}
-			};
-			
-			const setTaskCompleted = function() {
-				//TODO: set as completed without checking checkbox
-				if (taskCheckbox.checked) currentTask.completed = true;
-				if (!taskCheckbox.checked) currentTask.completed = false;
-				_appStorage_js__WEBPACK_IMPORTED_MODULE_0__.appStorage.setLocalStorage();
-				
-				if (checkComplete()) {
-					addStrikeThrough();
-				}
-				if (!checkComplete()) {
-					removeStrikeThrough();
-				}
-			};
-			
-			if (checkComplete()) {
-				addStrikeThrough();
-				taskCheckbox.checked = true;
-			}
-			
-			taskCheckbox.addEventListener('click', setTaskCompleted);
-			// if (currentTask.description) {
-			//     const descriptionBtn = markup.elementBuilder('button', 'description-btn', 'Show Description');
-			//     descriptionBtn.addEventListener('click', toggleDescriptionDisplay);
-			//     taskHeaderCenter.appendChild(descriptionBtn);
+      const checkComplete = function () {
+        return currentTask.completed;
+      };
 
-			//     const taskDescription = markup.elementBuilder('p', ['task-description', 'hidden'], currentTask.description);
-			//     descriptionContainer.appendChild(taskDescription);
-			// }
+      const addStrikeThrough = function () {
+        if (!taskLabel.classList.contains('checked')) {
+          taskLabel.classList.add('checked');
+          taskContainer.classList.add('checked');
+        }
+      };
 
-			if (currentTask.dueDate) {
-				//TODO: More work to format dates... today, tomorrow, yesterday, etc.
-				let dateStr;
-				if (project.title !== 'today') {
-					const today = _appStorage_js__WEBPACK_IMPORTED_MODULE_0__.appStorage.getToday();
-					const todayDay = today.getDay();
-					const dueDateDay = currentTask.dueDate.getDay();
-					const dueDate_msID = currentTask.dueDate.valueOf();
-					const dueDateYear = currentTask.dueDate.getFullYear();
-					const today_msID = today.valueOf();
-					const thisYear = today.getFullYear();
-					const endOfWeek = _appStorage_js__WEBPACK_IMPORTED_MODULE_0__.appStorage.getEndOfWeek();
-					const endOfWeek_msID = endOfWeek.valueOf();
+      const removeStrikeThrough = function () {
+        if (taskLabel.classList.contains('checked')) {
+          taskLabel.classList.remove('checked');
+          taskContainer.classList.remove('checked');
+        }
+      };
 
-					const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-					const monthsOfYear = [
-						'Jan',
-						'Feb',
-						'Mar',
-						'Apr',
-						'May',
-						'Jun',
-						'Jul',
-						'Aug',
-						'Sep',
-						'Oct',
-						'Nov',
-						'Dec'
-					];
+      const setTaskCompleted = function () {
+        //TODO: set as completed without checking checkbox
+        if (taskCheckbox.checked) currentTask.completed = true;
+        if (!taskCheckbox.checked) currentTask.completed = false;
+        _appStorage_js__WEBPACK_IMPORTED_MODULE_0__.appStorage.setLocalStorage();
 
-					if (today_msID <= dueDate_msID && endOfWeek_msID > dueDate_msID) {
-						if (dueDateDay === todayDay) {
-							dateStr = 'Today';
-						} else if (dueDateDay === (todayDay + 1) % 7) {
-							dateStr = 'Tomorrow';
-						} else {
-							dateStr = daysOfWeek[dueDateDay];
-						}
-					} else {
-						if (dueDateDay === todayDay - 1) {
-							dateStr = 'Yesterday';
-						} else {
-							dateStr = `${monthsOfYear[
-								currentTask.dueDate.getMonth()
-							]} ${currentTask.dueDate.getDate()}`;
+        if (checkComplete()) {
+          addStrikeThrough();
+        }
+        if (!checkComplete()) {
+          removeStrikeThrough();
+        }
+      };
 
-							if (dueDateYear !== thisYear) {
-								dateStr += ` ${dueDateYear}`;
-							}
-						}
-					}
-				}
+      if (checkComplete()) {
+        addStrikeThrough();
+        taskCheckbox.checked = true;
+      }
 
-				if (project.title === 'today') {
-					dateStr = ' ';
-				}
+      taskCheckbox.addEventListener('click', setTaskCompleted);
+      // if (currentTask.description) {
+      //     const descriptionBtn = markup.elementBuilder('button', 'description-btn', 'Show Description');
+      //     descriptionBtn.addEventListener('click', toggleDescriptionDisplay);
+      //     taskHeaderCenter.appendChild(descriptionBtn);
 
-				const taskDueDate = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder('p', 'task-due-date', dateStr);
-				taskHeaderLeftSide.appendChild(taskDueDate);
-			}
+      //     const taskDescription = markup.elementBuilder('p', ['task-description', 'hidden'], currentTask.description);
+      //     descriptionContainer.appendChild(taskDescription);
+      // }
 
-			const handleEditBtn = function() {
-				_forms_js__WEBPACK_IMPORTED_MODULE_2__.forms.openEditTaskForm(currentTask);
-			};
+      if (currentTask.dueDate) {
+        //TODO: More work to format dates... today, tomorrow, yesterday, etc.
+        let dateStr;
+        if (project.title !== 'today') {
+          const today = _appStorage_js__WEBPACK_IMPORTED_MODULE_0__.appStorage.getToday();
+          const todayDay = today.getDay();
+          const dueDateDay = currentTask.dueDate.getDay();
+          const dueDate_msID = currentTask.dueDate.valueOf();
+          const dueDateYear = currentTask.dueDate.getFullYear();
+          const today_msID = today.valueOf();
+          const thisYear = today.getFullYear();
+          const endOfWeek = _appStorage_js__WEBPACK_IMPORTED_MODULE_0__.appStorage.getEndOfWeek();
+          const endOfWeek_msID = endOfWeek.valueOf();
 
-			const editBtn = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder('button', 'edit-btn');
-			const editIcon = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder('i', ['fa', 'fa-ellipsis-h']);
-			editBtn.appendChild(editIcon);
-			editBtn.addEventListener('click', handleEditBtn);
+          const daysOfWeek = [
+            'Sunday',
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+            'Saturday',
+          ];
+          const monthsOfYear = [
+            'Jan',
+            'Feb',
+            'Mar',
+            'Apr',
+            'May',
+            'Jun',
+            'Jul',
+            'Aug',
+            'Sep',
+            'Oct',
+            'Nov',
+            'Dec',
+          ];
 
-			_markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.appendChildren([editBtn], taskHeaderRightSide);
+          if (today_msID <= dueDate_msID && endOfWeek_msID > dueDate_msID) {
+            if (dueDateDay === todayDay) {
+              dateStr = 'Today';
+            } else if (dueDateDay === (todayDay + 1) % 7) {
+              dateStr = 'Tomorrow';
+            } else {
+              dateStr = daysOfWeek[dueDateDay];
+            }
+          } else {
+            if (dueDateDay === todayDay - 1) {
+              dateStr = 'Yesterday';
+            } else {
+              dateStr = `${
+                monthsOfYear[currentTask.dueDate.getMonth()]
+              } ${currentTask.dueDate.getDate()}`;
 
-			//? Do we need this still?
-			if (project.title === 'today' || project.title === 'this week') {
-				const originalProject_uuid = currentTask.project_uuid;
-				const originalProject = _appStorage_js__WEBPACK_IMPORTED_MODULE_0__.appStorage.findProject(originalProject_uuid);
-				const projectReminder = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder('button', 'project-reminder', originalProject.title);
-				projectReminder.dataset.uuid = currentTask.project_uuid;
-				projectReminder.addEventListener('click', _navBar_js__WEBPACK_IMPORTED_MODULE_1__.navbar.handleProjectBtnClick);
-				taskHeaderRightSide.appendChild(projectReminder);
-			}
+              if (dueDateYear !== thisYear) {
+                dateStr += ` ${dueDateYear}`;
+              }
+            }
+          }
+        }
 
-			tasksContainer.appendChild(taskContainer);
-		}
+        if (project.title === 'today') {
+          dateStr = ' ';
+        }
 
-		if (project.title !== 'today' && project.title !== 'this week') {
-			const icon = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder('i', ['fa', 'fa-plus']);
-			const addTaskBtn = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder('button', 'add-task-btn');
-			const addTaskBtnText = document.createTextNode('Add Task');
+        const taskDueDate = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder(
+          'p',
+          'task-due-date',
+          dateStr
+        );
+        taskHeaderLeftSide.appendChild(taskDueDate);
+      }
 
-			_markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.appendChildren([icon, addTaskBtnText], addTaskBtn);
-			addTaskBtn.addEventListener('click', handleAddTaskBtnClick);
-			projectContainer.appendChild(addTaskBtn);
-		}
+      const handleEditBtn = function () {
+        _forms_js__WEBPACK_IMPORTED_MODULE_2__.forms.openEditTaskForm(currentTask);
+      };
 
-		mainContent.appendChild(projectContainer);
-	};
+      const editBtn = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder('button', 'edit-btn');
+      const editIcon = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder('i', ['fa', 'fa-ellipsis-h']);
+      editBtn.appendChild(editIcon);
+      editBtn.addEventListener('click', handleEditBtn);
 
-	renderMainContent();
+      _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.appendChildren([editBtn], taskHeaderRightSide);
 
-	return {
-		renderMainContent
-	};
+      //? Do we need this still?
+      if (project.title === 'today' || project.title === 'this week') {
+        const originalProject_uuid = currentTask.project_uuid;
+        const originalProject = _appStorage_js__WEBPACK_IMPORTED_MODULE_0__.appStorage.findProject(originalProject_uuid);
+        const projectReminder = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder(
+          'button',
+          'project-reminder',
+          originalProject.title
+        );
+        projectReminder.dataset.uuid = currentTask.project_uuid;
+        projectReminder.addEventListener('click', _navBar_js__WEBPACK_IMPORTED_MODULE_1__.navbar.handleProjectBtnClick);
+        taskHeaderRightSide.appendChild(projectReminder);
+      }
+
+      tasksContainer.appendChild(taskContainer);
+    }
+
+    if (project.title !== 'today' && project.title !== 'this week') {
+      const icon = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder('i', ['fa', 'fa-plus']);
+      const addTaskBtn = _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.elementBuilder('button', 'add-task-btn');
+      const addTaskBtnText = document.createTextNode('Add Task');
+
+      _markup_js__WEBPACK_IMPORTED_MODULE_3__.markup.appendChildren([icon, addTaskBtnText], addTaskBtn);
+      addTaskBtn.addEventListener('click', handleAddTaskBtnClick);
+      projectContainer.appendChild(addTaskBtn);
+    }
+
+    mainContent.appendChild(projectContainer);
+  };
+
+  renderMainContent();
+
+  return {
+    renderMainContent,
+  };
 })();
 
 
