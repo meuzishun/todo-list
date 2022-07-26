@@ -3,6 +3,14 @@ import { v4 as uuidv4 } from 'uuid';
 import { initializeApp } from 'firebase/app';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
+import {
+  getFirestore,
+  collection,
+  doc,
+  addDoc,
+  updateDoc,
+  getDocs,
+} from 'firebase/firestore';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -16,6 +24,10 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
+
+const db = getFirestore(firebaseApp);
+const todoCollection = collection(db, 'todos');
+const propStrDoc = doc(db, 'todos', 'Z2lCaH8GRm20LV9ey1QD');
 
 class Task {
   constructor(data) {
@@ -173,10 +185,15 @@ const appStorage = {
       }
     });
   },
+  setRemoteStorage: function () {
+    const propsStr = localStorage.getItem('todoListSettings');
+    updateDoc(propStrDoc, { propsStr });
+  },
   setLocalStorage: function () {
     const appData = JSON.stringify(this.properties);
     if (appData) {
       localStorage.setItem('todoListSettings', appData);
+      this.setRemoteStorage();
     }
   },
   getProperties: function () {
@@ -209,15 +226,25 @@ const appStorage = {
     this.properties = props;
     this.setLocalStorage();
   },
+  getRemoteStorage: function () {
+    //* getDocs takes a collection and returns a promise...
+    getDocs(todoCollection).then((snapshot) => {
+      //*...from which individual docs can be extracted
+      const data = snapshot.docs.map((doc) => {
+        return doc.data();
+      });
+      const propsStr = data[0].propsStr;
+      localStorage.setItem('todoListSettings', propsStr);
+      this.getLocalStorage();
+    });
+  },
   getLocalStorage: function () {
     const propsStr = localStorage.getItem('todoListSettings');
-    console.log(propsStr);
     if (!propsStr) {
       this.reset();
       return;
     }
     const propsObj = JSON.parse(propsStr);
-    console.log(propsObj);
     if (!propsObj) {
       this.reset();
       return;
@@ -285,6 +312,7 @@ const appStorage = {
   },
 };
 
+appStorage.getRemoteStorage();
 appStorage.getLocalStorage();
 
 export { appStorage };
