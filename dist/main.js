@@ -2988,11 +2988,13 @@ const appStorage = {
   },
   getLocalStorage: function () {
     const propsStr = localStorage.getItem('todoListSettings');
+    console.log(propsStr);
     if (!propsStr) {
       this.reset();
       return;
     }
     const propsObj = JSON.parse(propsStr);
+    console.log(propsObj);
     if (!propsObj) {
       this.reset();
       return;
