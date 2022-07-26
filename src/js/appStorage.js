@@ -1,4 +1,21 @@
 import { v4 as uuidv4 } from 'uuid';
+// Import the functions you need from the SDKs you need
+import { initializeApp } from 'firebase/app';
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: 'AIzaSyAiHt6B3G6GwOxAyG_pHIx40p24sAWbMuM',
+  authDomain: 'todo-list-redux-41609.firebaseapp.com',
+  projectId: 'todo-list-redux-41609',
+  storageBucket: 'todo-list-redux-41609.appspot.com',
+  messagingSenderId: '847317144294',
+  appId: '1:847317144294:web:e98cab05659748ce21e127',
+};
+
+// Initialize Firebase
+const firebaseApp = initializeApp(firebaseConfig);
 
 class Task {
   constructor(data) {
