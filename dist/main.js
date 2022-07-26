@@ -691,7 +691,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "appStorage": () => (/* binding */ appStorage)
 /* harmony export */ });
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
-// import {v4 as uuidv4} from 'https://jspm.dev/uuid';
 
 
 class Task {
